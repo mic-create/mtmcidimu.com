@@ -1326,3 +1326,30 @@ button, input, select, textarea {
     opacity: 1;
     transform: scale(1);
 }
+
+/* --------------------------------------------------------------------------
+   Hero Dynamic Text Transitions
+   -------------------------------------------------------------------------- */
+.hero-text-slideshow {
+    position: relative;
+    min-height: 220px; /* Reserves height so buttons don't jump around */
+    margin-bottom: 20px;
+}
+
+.hero-text-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+    pointer-events: none;
+}
+
+.hero-text-slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    position: relative; /* Keeps flow stable when active */
+}

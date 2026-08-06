@@ -369,3 +369,36 @@ function nextHeroSlide() {
 if (heroSlides.length > 1) {
     setInterval(nextHeroSlide, heroSlideInterval);
 }
+
+
+/* ==========================================================================
+   Synchronized Hero Background & Text Slideshow
+   ========================================================================== */
+const heroSlides = document.querySelectorAll('.hero-slide');
+const heroTextSlides = document.querySelectorAll('.hero-text-slide');
+let currentHeroIndex = 0;
+const heroSlideInterval = 5000; // Switch every 5 seconds
+
+function switchHeroSlide() {
+    if (heroSlides.length === 0 || heroTextSlides.length === 0) return;
+
+    // Remove active class from current image and text
+    heroSlides[currentHeroIndex].classList.remove('active');
+    heroTextSlides[currentHeroIndex].classList.remove('active');
+
+    // Advance index (loop back to 0)
+    currentHeroIndex = (currentHeroIndex + 1) % heroSlides.length;
+
+    // Add active class to next image and text
+    heroSlides[currentHeroIndex].classList.add('active');
+    
+    // Safety check if text slides count matches background slides
+    if (heroTextSlides[currentHeroIndex]) {
+        heroTextSlides[currentHeroIndex].classList.add('active');
+    }
+}
+
+// Initialize slideshow loop
+if (heroSlides.length > 1) {
+    setInterval(switchHeroSlide, heroSlideInterval);
+}
