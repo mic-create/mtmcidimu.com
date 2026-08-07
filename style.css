@@ -294,60 +294,40 @@ button, input, select, textarea {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 24px; /* Gives comfortable vertical padding around the enlarged logo */
+    padding: 12px 0;
 }
 
-/* ==========================================================================
-   Brand Logo Adjustments (Enhanced Sizing & Alignment)
-   ========================================================================== */
-
-/* Main brand container */
 .brand-logo {
     display: flex;
     align-items: center;
-    gap: 8px; /* Reduced gap to tighten spacing between emblem & text */
-    text-decoration: none;
+    gap: 12px;
 }
 
-/* Emblem / Logo Image */
 .logo-img {
-    height: 52px; /* Increased emblem size (previously ~40px) */
+    height: 45px;
     width: auto;
-    object-fit: contain;
-    transition: transform 0.3s ease;
 }
 
-/* Text Container */
 .brand-text {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    line-height: 1.1; /* Tightens vertical spacing between text lines */
 }
 
-/* Primary Brand Name */
 .brand-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.25rem; /* Increased text size for strong branding */
+    font-family: var(--font-heading);
     font-weight: 700;
-    color: #0b1a30;
-    letter-spacing: 0.5px;
+    font-size: 1.15rem;
+    color: #FFFFFF !important;
+    letter-spacing: 1px;
+    line-height: 1;
 }
 
-/* Subtitle / Subtext */
 .brand-sub {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.72rem; /* Slightly larger subtext for clarity */
+    font-size: 0.65rem;
     font-weight: 600;
-    color: #d4af37; /* Luxury gold accent */
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
+    color: var(--color-gold) !important;
+    letter-spacing: 2px;
     margin-top: 2px;
-}
-
-/* Subtle hover effect for the emblem */
-.brand-logo:hover .logo-img {
-    transform: scale(1.05);
 }
 
 .nav-list {
@@ -1606,51 +1586,3 @@ button, input, select, textarea {
     }
 }
 
-/* Mayo Clinic Style Social Media Icons */
-.social-block {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.social-label {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #ffffff;
-    font-family: 'Playfair Display', serif;
-}
-
-.social-links {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.social-circle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.12); /* Subtle circular badge */
-    color: #ffffff;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.social-circle svg {
-    display: block;
-    transition: transform 0.2s ease;
-}
-
-/* Hover State */
-.social-circle:hover {
-    background-color: #d4af37; /* Gold accent on hover */
-    color: #0b1a30;
-    transform: translateY(-2px);
-}
-
-.social-circle:hover svg {
-    transform: scale(1.1);
-}
