@@ -1877,49 +1877,102 @@ button, input, select, textarea {
 }
 
 /* ==========================================================================
-   Executive Clinical Services Showcase (Luxury Theme)
+   Futuristic Executive Services & Cyber Action Buttons
    ========================================================================== */
 
 .executive-services {
-    background-color: #061020; /* Deepest Navy for high contrast */
-    padding: 100px 0;
+    background-color: #030a16; /* Ultra-deep dark blue */
+    padding: 110px 0;
     position: relative;
+    overflow: hidden;
 }
 
-/* Gold Divider Line */
-.gold-divider {
-    width: 60px;
+.relative-z {
+    position: relative;
+    z-index: 2;
+}
+
+/* Ambient Cyber Glow Effects */
+.cyber-glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    filter: blur(140px);
+    opacity: 0.18;
+    pointer-events: none;
+}
+
+.glow-1 {
+    top: -100px;
+    left: -100px;
+    background: #C5A059; /* Gold ambient glow */
+}
+
+.glow-2 {
+    bottom: -100px;
+    right: -100px;
+    background: #00A8CC; /* Cyan ambient glow */
+}
+
+/* Futuristic Badge */
+.futuristic-badge {
+    background: rgba(197, 160, 89, 0.12);
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    color: #C5A059;
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 12px;
+    box-shadow: 0 0 15px rgba(197, 160, 89, 0.15);
+}
+
+.gold-cyber-divider {
+    width: 80px;
     height: 3px;
-    background: linear-gradient(90deg, #C5A059, #D4AF37);
+    background: linear-gradient(90deg, #C5A059, #2BB6E6, #C5A059);
     margin: 16px auto 20px;
     border-radius: 2px;
 }
 
-/* 3x2 Grid Layout */
+/* 3x2 Grid */
 .services-luxury-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    margin-top: 50px;
+    gap: 32px;
+    margin-top: 55px;
 }
 
-/* Luxury Card Styling */
+/* Glassmorphism Luxury Card */
 .luxury-service-card {
     position: relative;
-    background: linear-gradient(145deg, #0A192F 0%, #112240 100%);
-    border: 1px solid rgba(197, 160, 89, 0.2); /* Subtle Gold border */
-    border-radius: 12px;
-    padding: 38px 30px;
+    background: rgba(10, 25, 47, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 40px 32px;
     text-decoration: none;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
 }
 
-/* Hover Accent Line at Top of Card */
+/* Pulsating Card Aura on Hover */
+.card-glow-pulse {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(43, 182, 230, 0.15), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
 .service-card-border {
     position: absolute;
     top: 0;
@@ -1930,40 +1983,35 @@ button, input, select, textarea {
     transition: width 0.4s ease;
 }
 
-/* Icon Box */
 .service-icon-box {
     width: 64px;
     height: 64px;
-    border-radius: 10px;
-    background-color: rgba(197, 160, 89, 0.1);
-    color: #C5A059; /* Gold Icon */
+    border-radius: 12px;
+    background: rgba(197, 160, 89, 0.1);
+    color: #C5A059;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 24px;
     transition: all 0.3s ease;
-    border: 1px solid rgba(197, 160, 89, 0.2);
+    border: 1px solid rgba(197, 160, 89, 0.25);
 }
 
-/* Typography Inside Card */
 .service-card-title {
     font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
+    font-size: 1.45rem;
     font-weight: 700;
     color: #ffffff;
     margin-bottom: 12px;
-    transition: color 0.3s ease;
 }
 
 .service-card-desc {
-    font-family: 'Inter', sans-serif;
     font-size: 0.92rem;
     color: #94a3b8;
     line-height: 1.6;
     margin-bottom: 24px;
 }
 
-/* Bottom Call to Action Text */
 .service-card-link {
     font-size: 0.88rem;
     font-weight: 600;
@@ -1971,19 +2019,18 @@ button, input, select, textarea {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    transition: gap 0.3s ease, color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
-.service-card-link .arrow {
-    font-size: 1.1rem;
-    transition: transform 0.3s ease;
-}
-
-/* Card Hover States */
+/* Card Hover Physics */
 .luxury-service-card:hover {
-    transform: translateY(-8px);
-    border-color: #C5A059;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(197, 160, 89, 0.15);
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(197, 160, 89, 0.5);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(43, 182, 230, 0.2);
+}
+
+.luxury-service-card:hover .card-glow-pulse {
+    opacity: 1;
 }
 
 .luxury-service-card:hover .service-card-border {
@@ -1992,23 +2039,82 @@ button, input, select, textarea {
 
 .luxury-service-card:hover .service-icon-box {
     background-color: #C5A059;
-    color: #0A192F;
-    box-shadow: 0 4px 15px rgba(197, 160, 89, 0.4);
-}
-
-.luxury-service-card:hover .service-card-title {
-    color: #ffffff;
+    color: #030a16;
+    box-shadow: 0 0 20px rgba(197, 160, 89, 0.6);
 }
 
 .luxury-service-card:hover .service-card-link {
-    color: #2BB6E6; /* Cyan Highlight */
+    color: #2BB6E6;
 }
 
 .luxury-service-card:hover .service-card-link .arrow {
-    transform: translateX(5px);
+    transform: translateX(6px);
 }
 
-/* Responsive Adaptation */
+/* ==========================================================================
+   Futuristic Dual Action Buttons (Bottom Bar)
+   ========================================================================== */
+
+.futuristic-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    margin-top: 60px;
+}
+
+.futuristic-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 36px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Primary Cyber Button (Gold Glow) */
+.btn-cyber-primary {
+    background: linear-gradient(135deg, #C5A059 0%, #D4AF37 100%);
+    color: #030a16;
+    box-shadow: 0 10px 25px rgba(197, 160, 89, 0.3);
+}
+
+.btn-cyber-primary:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 15px 35px rgba(197, 160, 89, 0.5), 0 0 20px rgba(212, 175, 55, 0.4);
+}
+
+/* Secondary Cyber Button (Cyan / Glass) */
+.btn-cyber-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(43, 182, 230, 0.4);
+    color: #ffffff;
+    backdrop-filter: blur(10px);
+}
+
+.btn-cyber-secondary:hover {
+    background: rgba(43, 182, 230, 0.15);
+    border-color: #2BB6E6;
+    color: #2BB6E6;
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 10px 30px rgba(43, 182, 230, 0.3);
+}
+
+.btn-arrow {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.futuristic-btn:hover .btn-arrow {
+    transform: translateX(4px);
+}
+
+/* Responsive Handling */
 @media (max-width: 992px) {
     .services-luxury-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -2018,5 +2124,15 @@ button, input, select, textarea {
 @media (max-width: 600px) {
     .services-luxury-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .futuristic-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .futuristic-btn {
+        width: 100%;
+        justify-content: center;
     }
 }
