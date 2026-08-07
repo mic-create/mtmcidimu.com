@@ -1587,87 +1587,118 @@ button, input, select, textarea {
 }
 
 /* ==========================================================================
-   Contact Cards & Interactive Brand Links
+   Clean Contact Cards Section (Evercare Style)
    ========================================================================== */
 
-/* Linked Card Reset & Transition */
-.contact-card-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    cursor: pointer;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
-                box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
-                border-color 0.3s ease;
-    border: 1px solid rgba(197, 160, 89, 0.2);
+.contact-cards-section {
+    background-color: #ffffff;
+    padding: 80px 0;
 }
 
-.contact-card-link:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 28px rgba(10, 25, 47, 0.12);
-    border-color: #C5A059; /* Luxury Gold border highlight */
+.contact-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+/* Individual Card Container */
+.contact-card-box {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 32px 24px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hover States for Linked Cards */
+a.contact-card-box:hover {
+    border-color: #00A8CC;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+    transform: translateY(-4px);
 }
 
 /* Icon Badges */
-.contact-icon-wrapper {
-    width: 60px;
-    height: 60px;
+.contact-card-icon {
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 18px;
+    margin-bottom: 20px;
     transition: all 0.3s ease;
-    background-color: rgba(10, 25, 47, 0.05);
 }
 
-/* WhatsApp Icon Styling */
-.icon-whatsapp {
-    color: #25D366; /* Official WhatsApp Green */
+.icon-wa {
     background-color: rgba(37, 211, 102, 0.1);
+    color: #25D366;
 }
 
-.contact-card-link:hover .icon-whatsapp {
+a.contact-card-box:hover .icon-wa {
     background-color: #25D366;
     color: #ffffff;
-    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
 }
 
-/* Gmail Icon Styling */
-.icon-gmail {
-    color: #EA4335; /* Official Gmail Red */
-    background-color: rgba(234, 67, 53, 0.1);
+.icon-mail {
+    background-color: rgba(0, 168, 204, 0.1);
+    color: #00A8CC;
 }
 
-.contact-card-link:hover .icon-gmail {
-    background-color: #EA4335;
+a.contact-card-box:hover .icon-mail {
+    background-color: #00A8CC;
     color: #ffffff;
-    box-shadow: 0 4px 14px rgba(234, 67, 53, 0.35);
 }
 
-/* Clock Icon Badge */
 .icon-clock {
+    background-color: rgba(10, 25, 47, 0.08);
     color: #0A192F;
-    background-color: rgba(197, 160, 89, 0.15);
 }
 
-.classic-emoji {
-    font-size: 1.8rem;
+/* Typography */
+.contact-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0b1a30;
+    margin-bottom: 10px;
 }
 
-/* Call-to-action hint text inside cards */
-.card-action-text {
-    display: inline-block;
-    margin-top: 8px;
-    font-size: 0.85rem;
+.contact-card-text {
+    font-size: 0.92rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.contact-card-action {
+    font-size: 0.88rem;
     font-weight: 600;
-    color: #C5A059; /* Gold Accent */
-    transition: color 0.2s ease, transform 0.2s ease;
+    color: #00A8CC;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap 0.2s ease;
 }
 
-.contact-card-link:hover .card-action-text {
-    color: #0A192F;
-    text-decoration: underline;
+a.contact-card-box:hover .contact-card-action {
+    color: #C5A059;
+}
+
+a.contact-card-box:hover .contact-card-action .arrow {
+    transform: translateX(4px);
+}
+
+/* Responsive view for screens under 992px */
+@media (max-width: 992px) {
+    .contact-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
 }
 
 /* ==========================================================================
