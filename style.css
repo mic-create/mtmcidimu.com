@@ -1875,3 +1875,148 @@ button, input, select, textarea {
     color: #C5A059; /* Luxury Gold accent on hover */
     transform: translateX(3px);
 }
+
+/* ==========================================================================
+   Executive Clinical Services Showcase (Luxury Theme)
+   ========================================================================== */
+
+.executive-services {
+    background-color: #061020; /* Deepest Navy for high contrast */
+    padding: 100px 0;
+    position: relative;
+}
+
+/* Gold Divider Line */
+.gold-divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #C5A059, #D4AF37);
+    margin: 16px auto 20px;
+    border-radius: 2px;
+}
+
+/* 3x2 Grid Layout */
+.services-luxury-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 50px;
+}
+
+/* Luxury Card Styling */
+.luxury-service-card {
+    position: relative;
+    background: linear-gradient(145deg, #0A192F 0%, #112240 100%);
+    border: 1px solid rgba(197, 160, 89, 0.2); /* Subtle Gold border */
+    border-radius: 12px;
+    padding: 38px 30px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Hover Accent Line at Top of Card */
+.service-card-border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, #C5A059, #2BB6E6);
+    transition: width 0.4s ease;
+}
+
+/* Icon Box */
+.service-icon-box {
+    width: 64px;
+    height: 64px;
+    border-radius: 10px;
+    background-color: rgba(197, 160, 89, 0.1);
+    color: #C5A059; /* Gold Icon */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(197, 160, 89, 0.2);
+}
+
+/* Typography Inside Card */
+.service-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 12px;
+    transition: color 0.3s ease;
+}
+
+.service-card-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.92rem;
+    color: #94a3b8;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+/* Bottom Call to Action Text */
+.service-card-link {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #C5A059;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: gap 0.3s ease, color 0.3s ease;
+}
+
+.service-card-link .arrow {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+/* Card Hover States */
+.luxury-service-card:hover {
+    transform: translateY(-8px);
+    border-color: #C5A059;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(197, 160, 89, 0.15);
+}
+
+.luxury-service-card:hover .service-card-border {
+    width: 100%;
+}
+
+.luxury-service-card:hover .service-icon-box {
+    background-color: #C5A059;
+    color: #0A192F;
+    box-shadow: 0 4px 15px rgba(197, 160, 89, 0.4);
+}
+
+.luxury-service-card:hover .service-card-title {
+    color: #ffffff;
+}
+
+.luxury-service-card:hover .service-card-link {
+    color: #2BB6E6; /* Cyan Highlight */
+}
+
+.luxury-service-card:hover .service-card-link .arrow {
+    transform: translateX(5px);
+}
+
+/* Responsive Adaptation */
+@media (max-width: 992px) {
+    .services-luxury-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .services-luxury-grid {
+        grid-template-columns: 1fr;
+    }
+}
