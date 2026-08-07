@@ -12,211 +12,136 @@ document.addEventListener('DOMContentLoaded', () => {
     const heroSlides = document.querySelectorAll('.hero-slide');
     const heroTextSlides = document.querySelectorAll('.hero-text-slide');
     let currentHeroIndex = 0;
-    const heroSlideInterval = 5000; // Change image & text every 5 seconds
+    const heroSlideInterval = 5000; // Switch image & text every 5 seconds
 
     function switchHeroSlide() {
         if (heroSlides.length === 0 || heroTextSlides.length === 0) return;
 
-        // Remove active class from current image and text
         heroSlides[currentHeroIndex].classList.remove('active');
         heroTextSlides[currentHeroIndex].classList.remove('active');
 
-        // Advance index (loop back to 0 at the end)
         currentHeroIndex = (currentHeroIndex + 1) % heroSlides.length;
 
-        // Add active class to next image and text
         heroSlides[currentHeroIndex].classList.add('active');
         if (heroTextSlides[currentHeroIndex]) {
             heroTextSlides[currentHeroIndex].classList.add('active');
         }
     }
 
-    // Initialize auto-rotation if there are slides present
     if (heroSlides.length > 1) {
         setInterval(switchHeroSlide, heroSlideInterval);
     }
 
     /* ==========================================================================
-       2. Navigation & Scroll Effects
+       2. Sticky Header Glass Effect & Scroll Progress Bar
        ========================================================================== */
     const header = document.getElementById('mainHeader');
     const scrollProgress = document.getElementById('scrollProgress');
     const backToTopBtn = document.getElementById('backToTop');
-    const navLinks = document.querySelectorAll('.nav-link');
-    const sections = document.querySelectorAll('section[id]');
 
-    function debounce(func, wait = 10, immediate = true) {
-        let timeout;
-        return function () {
-            const context = this, args = arguments;
-            const later = function () {
-                timeout = null;
-                if (!immediate) func.apply(context, args);
-            };
-            const callNow = immediate && !timeout;
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-            if (callNow) func.apply(context, args);
-        };
-    }
-
-    const handleScroll = () => {
-        const scrollY = window.scrollY;
-        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-
-        if (docHeight > 0) {
-            const progress = (scrollY / docHeight) * 100;
+    window.addEventListener('scroll', () => {
+        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = (window.scrollY / totalHeight) * 100;
+        
+        if (scrollProgress) {
             scrollProgress.style.width = `${progress}%`;
         }
 
-        if (scrollY > 50) {
+        if (window.scrollY > 100) {
             header.classList.add('scrolled');
+            if (backToTopBtn) backToTopBtn.style.display = 'block';
         } else {
             header.classList.remove('scrolled');
+            if (backToTopBtn) backToTopBtn.style.display = 'none';
         }
-
-        if (scrollY > 400) {
-            backToTopBtn.classList.add('visible');
-        } else {
-            backToTopBtn.classList.remove('visible');
-        }
-
-        sections.forEach(section => {
-            const sectionHeight = section.offsetHeight;
-            const sectionTop = section.offsetTop - 120;
-            const sectionId = section.getAttribute('id');
-
-            if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${sectionId}`) {
-                        link.classList.add('active');
-                    }
-                });
-            }
-        });
-    };
-
-    window.addEventListener('scroll', debounce(handleScroll, 10, false));
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            const targetElement = document.querySelector(targetId);
-
-            if (targetElement) {
-                e.preventDefault();
-                if (navMenu.classList.contains('active')) {
-                    toggleMobileMenu();
-                }
-
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
     });
 
-    backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
+    if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-    });
+    }
 
     /* ==========================================================================
-       3. Mobile Navigation Toggle
+       3. Mobile Navigation Drawer Toggle
        ========================================================================== */
     const mobileToggle = document.getElementById('mobileToggle');
     const navMenu = document.getElementById('navMenu');
 
-    function toggleMobileMenu() {
-        navMenu.classList.toggle('active');
-        mobileToggle.classList.toggle('open');
+    if (mobileToggle && navMenu) {
+        mobileToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            mobileToggle.classList.toggle('open');
+        });
 
-        const bars = mobileToggle.querySelectorAll('.bar');
-        if (mobileToggle.classList.contains('open')) {
-            bars[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-            bars[1].style.opacity = '0';
-            bars[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-        } else {
-            bars[0].style.transform = 'none';
-            bars[1].style.opacity = '1';
-            bars[2].style.transform = 'none';
-        }
-    }
-
-    if (mobileToggle) {
-        mobileToggle.addEventListener('click', toggleMobileMenu);
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                mobileToggle.classList.remove('open');
+            });
+        });
     }
 
     /* ==========================================================================
-       4. Intersection Observer for Scroll Reveal Animations
+       4. Scroll-Triggered Reveal Animations
        ========================================================================== */
     const revealElements = document.querySelectorAll('.reveal');
 
-    const revealObserverOptions = {
-        root: null,
-        threshold: 0.15,
-        rootMargin: '0px 0px -50px 0px'
-    };
+    function checkReveal() {
+        const triggerBottom = window.innerHeight * 0.85;
 
-    const revealObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('active');
-                observer.unobserve(entry.target);
+        revealElements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+
+            if (elementTop < triggerBottom) {
+                element.classList.add('active');
             }
         });
-    }, revealObserverOptions);
-
-    revealElements.forEach(el => revealObserver.observe(el));
-
-    /* ==========================================================================
-       5. Animated Counter Statistics
-       ========================================================================== */
-    const statNumbers = document.querySelectorAll('.stat-number');
-    let animatedStats = false;
-
-    const animateCounters = () => {
-        statNumbers.forEach(counter => {
-            const target = +counter.getAttribute('data-target');
-            const duration = 2000;
-            const stepTime = 20;
-            const steps = duration / stepTime;
-            const increment = target / steps;
-            let current = 0;
-
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    counter.textContent = target.toLocaleString();
-                    clearInterval(timer);
-                } else {
-                    counter.textContent = Math.ceil(current).toLocaleString();
-                }
-            }, stepTime);
-        });
-    };
-
-    const statsSection = document.querySelector('.stats');
-    if (statsSection) {
-        const statsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !animatedStats) {
-                    animateCounters();
-                    animatedStats = true;
-                }
-            });
-        }, { threshold: 0.4 });
-
-        statsObserver.observe(statsSection);
     }
 
+    window.addEventListener('scroll', checkReveal);
+    checkReveal();
+
     /* ==========================================================================
-       6. Patient Testimonial Carousel
+       5. Animated Statistics Counter
+       ========================================================================== */
+    const statNumbers = document.querySelectorAll('.stat-number');
+    let animated = false;
+
+    function startCounter() {
+        const statsSection = document.querySelector('.stats');
+        if (!statsSection) return;
+
+        const sectionPos = statsSection.getBoundingClientRect().top;
+        const screenPos = window.innerHeight;
+
+        if (sectionPos < screenPos && !animated) {
+            animated = true;
+            statNumbers.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const speed = 200;
+                const increment = target / speed;
+
+                let count = 0;
+                const updateCount = () => {
+                    count += increment;
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count);
+                        setTimeout(updateCount, 15);
+                    } else {
+                        counter.innerText = target.toLocaleString();
+                    }
+                };
+
+                updateCount();
+            });
+        }
+    }
+
+    window.addEventListener('scroll', startCounter);
+
+    /* ==========================================================================
+       6. Testimonials Carousel
        ========================================================================== */
     const slides = document.querySelectorAll('.testimonial-slide');
     const prevBtn = document.getElementById('prevTestimonial');
@@ -226,15 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showSlide(index) {
         slides.forEach(slide => slide.classList.remove('active'));
-        
-        if (index >= slides.length) {
-            currentSlide = 0;
-        } else if (index < 0) {
-            currentSlide = slides.length - 1;
-        } else {
-            currentSlide = index;
-        }
-
+        currentSlide = (index + slides.length) % slides.length;
         slides[currentSlide].classList.add('active');
     }
 
