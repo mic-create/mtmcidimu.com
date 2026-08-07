@@ -1501,3 +1501,87 @@ button, input, select, textarea {
 
     .appointment-form-wrapper { padding: 25px; }
 }
+
+/* ==========================================================================
+   Featured Care Areas (Mayo Clinic Style)
+   ========================================================================== */
+.featured-care {
+    background-color: #ffffff;
+    padding: 80px 0;
+}
+
+.care-areas-grid {
+    display: grid;
+    grid-template-columns: 1fr 2.2fr;
+    gap: 60px;
+    align-items: start;
+}
+
+.care-header-block {
+    padding-right: 20px;
+}
+
+.care-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #0b1a30;
+    margin-bottom: 16px;
+}
+
+.care-description {
+    font-size: 1rem;
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.care-links-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+
+/* Individual Care Links */
+.care-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #e2e8f0;
+    text-decoration: none;
+    color: #0056b3; /* Clean healthcare blue */
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.care-item:hover {
+    color: #d4af37; /* Luxury Gold Accent on hover */
+    padding-left: 6px;
+}
+
+.care-arrow {
+    font-size: 1.2rem;
+    color: #0056b3;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.care-item:hover .care-arrow {
+    color: #d4af37;
+    transform: translateX(4px);
+}
+
+/* Responsive view for tablets & phones */
+@media (max-width: 992px) {
+    .care-areas-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+}
+
+@media (max-width: 600px) {
+    .care-links-wrapper {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
