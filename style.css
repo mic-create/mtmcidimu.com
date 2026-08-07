@@ -1585,3 +1585,52 @@ button, input, select, textarea {
         gap: 0;
     }
 }
+
+/* Mayo Clinic Style Social Media Icons */
+.social-block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.social-label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    font-family: 'Playfair Display', serif;
+}
+
+.social-links {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.social-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.12); /* Subtle circular badge */
+    color: #ffffff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-circle svg {
+    display: block;
+    transition: transform 0.2s ease;
+}
+
+/* Hover State */
+.social-circle:hover {
+    background-color: #d4af37; /* Gold accent on hover */
+    color: #0b1a30;
+    transform: translateY(-2px);
+}
+
+.social-circle:hover svg {
+    transform: scale(1.1);
+}
