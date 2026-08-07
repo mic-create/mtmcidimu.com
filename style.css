@@ -1587,55 +1587,122 @@ button, input, select, textarea {
 }
 
 /* ==========================================================================
-   Clean Contact Cards Section (Evercare Style)
+   Executive Textured Contact Section
    ========================================================================== */
 
 .contact-cards-section {
-    background-color: #ffffff;
-    padding: 80px 0;
+    position: relative;
+    background-color: #061020; /* Dark premium tone */
+    padding: 100px 0;
+    overflow: hidden;
 }
 
+/* Texture Pattern Overlay */
+.texture-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: 
+        radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0),
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 24px 24px, 40px 40px, 40px 40px;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Ambient Subtle Lighting */
+.texture-glow {
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    border-radius: 50%;
+    filter: blur(130px);
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+.glow-top-left {
+    top: -100px;
+    left: -100px;
+    background: #C5A059; /* Gold Glow */
+}
+
+.glow-bottom-right {
+    bottom: -100px;
+    right: -100px;
+    background: #00A8CC; /* Cyan Glow */
+}
+
+.relative-z {
+    position: relative;
+    z-index: 2;
+}
+
+/* Header Styling */
+.luxury-badge {
+    background: rgba(197, 160, 89, 0.12);
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    color: #C5A059;
+    padding: 6px 18px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.gold-cyan-divider {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, #C5A059, #00A8CC, #C5A059);
+    margin: 16px auto 20px;
+    border-radius: 2px;
+}
+
+/* Grid Layout */
 .contact-cards-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
+    margin-top: 40px;
 }
 
-/* Individual Card Container */
+/* Contact Cards (Glassmorphism & Crisp White Interior) */
 .contact-card-box {
     background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 32px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 36px 28px;
     text-decoration: none;
     color: inherit;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
 }
 
-/* Hover States for Linked Cards */
 a.contact-card-box:hover {
-    border-color: #00A8CC;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-    transform: translateY(-4px);
+    border-color: #C5A059;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4), 0 0 20px rgba(197, 160, 89, 0.2);
+    transform: translateY(-6px);
 }
 
-/* Icon Badges */
+/* Circle Icons */
 .contact-card-icon {
-    width: 50px;
-    height: 50px;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
     transition: all 0.3s ease;
 }
 
 .icon-wa {
-    background-color: rgba(37, 211, 102, 0.1);
+    background-color: rgba(37, 211, 102, 0.12);
     color: #25D366;
 }
 
@@ -1645,7 +1712,7 @@ a.contact-card-box:hover .icon-wa {
 }
 
 .icon-mail {
-    background-color: rgba(0, 168, 204, 0.1);
+    background-color: rgba(0, 168, 204, 0.12);
     color: #00A8CC;
 }
 
@@ -1659,10 +1726,10 @@ a.contact-card-box:hover .icon-mail {
     color: #0A192F;
 }
 
-/* Typography */
+/* Typography Inside Cards */
 .contact-card-title {
     font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     font-weight: 700;
     color: #0b1a30;
     margin-bottom: 10px;
@@ -1672,7 +1739,15 @@ a.contact-card-box:hover .icon-mail {
     font-size: 0.92rem;
     color: #64748b;
     line-height: 1.6;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
+}
+
+.email-display {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #00A8CC;
+    margin-top: 6px;
 }
 
 .contact-card-action {
@@ -1690,10 +1765,10 @@ a.contact-card-box:hover .contact-card-action {
 }
 
 a.contact-card-box:hover .contact-card-action .arrow {
-    transform: translateX(4px);
+    transform: translateX(5px);
 }
 
-/* Responsive view for screens under 992px */
+/* Responsive Adjustments */
 @media (max-width: 992px) {
     .contact-cards-grid {
         grid-template-columns: 1fr;
