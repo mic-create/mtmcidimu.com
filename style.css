@@ -1669,3 +1669,121 @@ button, input, select, textarea {
     color: #0A192F;
     text-decoration: underline;
 }
+
+/* ==========================================================================
+   Mega-Menu "About Us" Dropdown (Evercare Style)
+   ========================================================================== */
+
+.mega-dropdown {
+    position: relative;
+}
+
+/* Floating White Popup Card */
+.mega-menu {
+    position: absolute;
+    top: 100%;
+    left: -80px; /* Aligns comfortably beneath the nav header */
+    width: 680px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1200;
+}
+
+/* Reveal on Hover */
+.mega-dropdown:hover .mega-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.mega-menu-inner {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+}
+
+/* Left Image Box */
+.mega-menu-image {
+    width: 210px;
+    height: 180px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mega-menu-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 3-Column Layout */
+.mega-menu-cols {
+    display: flex;
+    gap: 28px;
+    flex-grow: 1;
+    padding-top: 5px;
+}
+
+.mega-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Individual Links */
+.mega-link {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: #2c3e50; /* Dark slate text for white card contrast */
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+    white-space: nowrap;
+}
+
+/* Active / Highlighted First Item */
+.mega-link.active-link {
+    color: #00A8CC; /* Cyan accent matching Evercare highlight */
+    font-weight: 600;
+}
+
+.mega-link:hover {
+    color: #C5A059; /* Luxury Gold on hover */
+    transform: translateX(3px);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 992px) {
+    .mega-menu {
+        position: static;
+        width: 100%;
+        box-shadow: none;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.05);
+        display: none;
+    }
+
+    .mega-dropdown:hover .mega-menu {
+        display: block;
+    }
+
+    .mega-menu-inner {
+        flex-direction: column;
+    }
+
+    .mega-menu-cols {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .mega-link {
+        color: #ffffff;
+    }
+}
