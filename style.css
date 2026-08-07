@@ -294,40 +294,60 @@ button, input, select, textarea {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 0;
+    padding: 12px 24px; /* Gives comfortable vertical padding around the enlarged logo */
 }
 
+/* ==========================================================================
+   Brand Logo Adjustments (Enhanced Sizing & Alignment)
+   ========================================================================== */
+
+/* Main brand container */
 .brand-logo {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px; /* Reduced gap to tighten spacing between emblem & text */
+    text-decoration: none;
 }
 
+/* Emblem / Logo Image */
 .logo-img {
-    height: 45px;
+    height: 52px; /* Increased emblem size (previously ~40px) */
     width: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
 }
 
+/* Text Container */
 .brand-text {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    line-height: 1.1; /* Tightens vertical spacing between text lines */
 }
 
+/* Primary Brand Name */
 .brand-name {
-    font-family: var(--font-heading);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem; /* Increased text size for strong branding */
     font-weight: 700;
-    font-size: 1.15rem;
-    color: #FFFFFF !important;
-    letter-spacing: 1px;
-    line-height: 1;
+    color: #0b1a30;
+    letter-spacing: 0.5px;
 }
 
+/* Subtitle / Subtext */
 .brand-sub {
-    font-size: 0.65rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem; /* Slightly larger subtext for clarity */
     font-weight: 600;
-    color: var(--color-gold) !important;
-    letter-spacing: 2px;
+    color: #d4af37; /* Luxury gold accent */
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
     margin-top: 2px;
+}
+
+/* Subtle hover effect for the emblem */
+.brand-logo:hover .logo-img {
+    transform: scale(1.05);
 }
 
 .nav-list {
