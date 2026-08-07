@@ -1365,6 +1365,42 @@ button, input, select, textarea {
         align-items: flex-start;
     }
 }
+
+/* Link formatting for column headers */
+.footer-heading-link {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+}
+
+.footer-heading-link:hover .footer-heading {
+    color: #d4af37;
+}
+
+/* Location Address Link */
+.address-link {
+    color: #cbd5e1;
+    text-decoration: none;
+    display: block;
+    line-height: 1.5;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.address-link:hover {
+    color: #d4af37;
+}
+
+/* Copyright Hyperlink */
+.copyright-link {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.copyright-link:hover {
+    color: #ffffff;
+}
 /* --------------------------------------------------------------------------
    20. Back to Top Button
    -------------------------------------------------------------------------- */
