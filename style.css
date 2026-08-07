@@ -16,7 +16,7 @@
     --color-green: #0D7C66;
     --color-green-dark: #074E40;
     
-    /* Premium Ivory/Warm Palette (Replaces pure white) */
+    /* Premium Ivory/Warm Palette */
     --color-white: #F9F8F6;
     --color-light-grey: #EAE8E3;
     --color-mid-grey: #D8D4CB;
@@ -256,7 +256,7 @@ button, input, select, textarea {
 }
 
 /* --------------------------------------------------------------------------
-   4. Progress Bar & Top Bar
+   4. Scroll Progress Bar
    -------------------------------------------------------------------------- */
 .scroll-progress-bar {
     position: fixed;
@@ -269,40 +269,8 @@ button, input, select, textarea {
     transition: width 0.1s ease-out;
 }
 
-.top-bar {
-    background-color: var(--color-navy-dark);
-    color: #FFFFFF;
-    font-size: 0.85rem;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.top-bar-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.top-info {
-    display: flex;
-    gap: 25px;
-}
-
-.top-info span {
-    opacity: 0.85;
-}
-
-.emergency-badge {
-    background-color: rgba(217, 83, 79, 0.2);
-    color: #FF6B6B;
-    border: 1px solid rgba(255, 107, 107, 0.4);
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-weight: 600;
-}
-
 /* --------------------------------------------------------------------------
-   5. Header & Navigation (Premium Dark Glassmorphism)
+   5. Header & Navigation (Dark Glassmorphism)
    -------------------------------------------------------------------------- */
 .header {
     position: sticky;
@@ -584,7 +552,7 @@ button, input, select, textarea {
 }
 
 /* --------------------------------------------------------------------------
-   8. About Section (Replaced white background with mother-teresa-bg.jpg)
+   8. About Section
    -------------------------------------------------------------------------- */
 .about {
     position: relative;
@@ -1298,15 +1266,12 @@ button, input, select, textarea {
 }
 
 @media (max-width: 768px) {
-    .top-bar-content { flex-direction: column; gap: 8px; text-align: center; }
-    .top-info { flex-direction: column; gap: 5px; }
-    
     .nav-menu {
         position: fixed;
-        top: 75px;
+        top: 70px;
         left: -100%;
         width: 100%;
-        height: calc(100vh - 75px);
+        height: calc(100vh - 70px);
         background: var(--color-navy);
         padding: 40px;
         transition: left 0.4s ease;
