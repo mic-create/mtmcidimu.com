@@ -120,48 +120,77 @@
         </div>
     </header>
 
-    <section class="hero" id="hero">
-        <div class="hero-slideshow">
-            <div class="hero-slide active" style="background-image: url('images/hero.jpg');"></div>
-            <div class="hero-slide" style="background-image: url('images/hospital interior1.jpg');"></div>
-            <div class="hero-slide" style="background-image: url('images/reception.jpg');"></div>
-            <div class="hero-slide" style="background-image: url('images/speech.jpg');"></div>
-            <div class="hero-slide" style="background-image: url('images/executives.jpg');"></div>
-        </div>
-        <div class="hero-overlay"></div>
+    <!-- ==========================================================================
+   Hero Section (5-Image Slideshow with Arrows & Dots)
+   ========================================================================== -->
+<section class="hero" id="home">
+    <!-- Slideshow Background Images (5 Slides) -->
+    <div class="hero-slideshow">
+        <div class="hero-slide active" style="background-image: url('images/hero-slide-1.jpg');"></div>
+        <div class="hero-slide" style="background-image: url('images/hero-slide-2.jpg');"></div>
+        <div class="hero-slide" style="background-image: url('images/hero-slide-3.jpg');"></div>
+        <div class="hero-slide" style="background-image: url('images/hero-slide-4.jpg');"></div>
+        <div class="hero-slide" style="background-image: url('images/hero-slide-5.jpg');"></div>
+    </div>
+    
+    <div class="hero-overlay"></div>
 
-        <div class="container hero-content">
-            <span class="hero-badge">Luxury Healthcare Experience</span>
+    <div class="container hero-container">
+        <div class="hero-content">
+            <!-- Updated Badge Text -->
+            <span class="hero-badge">MOTHER TERESA MEDICAL CENTRE &middot; IDIMU</span>
 
+            <!-- Synchronized Text Slideshow -->
             <div class="hero-text-slideshow">
+                <!-- Slide 1 -->
                 <div class="hero-text-slide active">
-                    <h1 class="hero-title">Excellence in Medical Care</h1>
-                    <p class="hero-description">Experience elite private healthcare rooted in faith, cutting-edge innovation, and uncompromising luxury. Located at St. Francis Catholic Church, Idimu, Lagos.</p>
+                    <h1 class="hero-title">World-Class Healthcare, Compassionate Healing</h1>
+                    <p class="hero-description">Delivering excellence in medical diagnostics, advanced surgery, and patient-centered clinical care with uncompromising international standards.</p>
                 </div>
+                <!-- Slide 2 -->
                 <div class="hero-text-slide">
-                    <h1 class="hero-title">State-of-the-Art Facilities</h1>
-                    <p class="hero-description">Equipped with modern diagnostic technology and luxury inpatient suites designed for ultimate patient comfort and privacy.</p>
+                    <h1 class="hero-title">State-of-the-Art Medical Technology</h1>
+                    <p class="hero-description">Equipped with cutting-edge infrastructure and advanced imaging to ensure accurate diagnoses and superior therapeutic outcomes.</p>
                 </div>
+                <!-- Slide 3 -->
                 <div class="hero-text-slide">
-                    <h1 class="hero-title">World-Class Specialists</h1>
-                    <p class="hero-description">Access dedicated medical personnel and internationally trained consultants across specialized healthcare disciplines.</p>
+                    <h1 class="hero-title">Distinguished Medical Specialists</h1>
+                    <p class="hero-description">Our multidisciplinary team of renowned physicians and surgeons bring decades of global expertise to your health journey.</p>
                 </div>
+                <!-- Slide 4 -->
                 <div class="hero-text-slide">
-                    <h1 class="hero-title">Compassionate Care</h1>
-                    <p class="hero-description">Driven by faith and medical brilliance to provide patient-centered care and holistic healing environments.</p>
+                    <h1 class="hero-title">24/7 Emergency & Critical Care</h1>
+                    <p class="hero-description">Rapid-response emergency care units managed by specialist trauma teams ready to deliver life-saving interventions at a moment's notice.</p>
                 </div>
+                <!-- Slide 5 -->
                 <div class="hero-text-slide">
-                    <h1 class="hero-title">Executive Leadership</h1>
-                    <p class="hero-description">Guided by visionary health administrators committed to elevating healthcare delivery standards across Lagos.</p>
+                    <h1 class="hero-title">Your Trusted Sanctuary of Wellness</h1>
+                    <p class="hero-description">Experience bespoke healthcare services designed for comfort, healing, and long-term vitality for you and your family.</p>
                 </div>
             </div>
 
+            <!-- Action Buttons -->
             <div class="hero-buttons">
-                <a href="#appointment" class="btn btn-primary btn-large">Schedule a Consultation</a>
-                <a href="#about" class="btn btn-secondary btn-large">Discover Our Medical Centre</a>
+                <a href="#appointment" class="btn btn-primary btn-large">Book Consultation</a>
+                <a href="#departments" class="btn btn-secondary btn-large">Explore Departments</a>
             </div>
         </div>
-    </section>
+    </div>
+
+    <!-- Navigation Arrows -->
+    <button class="hero-arrow hero-prev" id="heroPrev" aria-label="Previous Slide">&#10094;</button>
+    <button class="hero-arrow hero-next" id="heroNext" aria-label="Next Slide">&#10095;</button>
+
+    <!-- Pagination Dots -->
+    <div class="hero-dots" id="heroDots">
+        <span class="hero-dot active" data-index="0"></span>
+        <span class="hero-dot" data-index="1"></span>
+        <span class="hero-dot" data-index="2"></span>
+        <span class="hero-dot" data-index="3"></span>
+        <span class="hero-dot" data-index="4"></span>
+    </div>
+</section>
+
 
     <section class="quick-services">
         <div class="container">
