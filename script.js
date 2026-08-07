@@ -4,76 +4,37 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const bgSlides = document.querySelectorAll('.hero-slide');
-    const textSlides = document.querySelectorAll('.hero-text-slide');
-    const dots = document.querySelectorAll('.hero-dots .dot');
-    const prevBtn = document.getElementById('heroPrevBtn');
-    const nextBtn = document.getElementById('heroNextBtn');
+    'use strict';
 
-    if (!bgSlides.length) return;
+    /* ==========================================================================
+       1. Synchronized Hero Background & Text Slideshow Logic
+       ========================================================================== */
+    const heroSlides = document.querySelectorAll('.hero-slide');
+    const heroTextSlides = document.querySelectorAll('.hero-text-slide');
+    let currentHeroIndex = 0;
+    const heroSlideInterval = 5000; // Change image & text every 5 seconds
 
-    let currentIndex = 0;
-    const totalSlides = bgSlides.length;
-    let slideInterval;
+    function switchHeroSlide() {
+        if (heroSlides.length === 0 || heroTextSlides.length === 0) return;
 
-    function goToSlide(index) {
-        // Remove active class from all elements
-        bgSlides.forEach(slide => slide.classList.remove('active'));
-        textSlides.forEach(slide => slide.classList.remove('active'));
-        dots.forEach(dot => dot.classList.remove('active'));
+        // Remove active class from current image and text
+        heroSlides[currentHeroIndex].classList.remove('active');
+        heroTextSlides[currentHeroIndex].classList.remove('active');
 
-        // Set active slide index
-        currentIndex = (index + totalSlides) % totalSlides;
+        // Advance index (loop back to 0 at the end)
+        currentHeroIndex = (currentHeroIndex + 1) % heroSlides.length;
 
-        // Add active class to targeted elements
-        bgSlides[currentIndex].classList.add('active');
-        if (textSlides[currentIndex]) textSlides[currentIndex].classList.add('active');
-        if (dots[currentIndex]) dots[currentIndex].classList.add('active');
+        // Add active class to next image and text
+        heroSlides[currentHeroIndex].classList.add('active');
+        if (heroTextSlides[currentHeroIndex]) {
+            heroTextSlides[currentHeroIndex].classList.add('active');
+        }
     }
 
-    function nextSlide() {
-        goToSlide(currentIndex + 1);
+    // Initialize auto-rotation if there are slides present
+    if (heroSlides.length > 1) {
+        setInterval(switchHeroSlide, heroSlideInterval);
     }
-
-    function prevSlide() {
-        goToSlide(currentIndex - 1);
-    }
-
-    // Auto-advance slideshow
-    function startAutoSlide() {
-        stopAutoSlide();
-        slideInterval = setInterval(nextSlide, 6000);
-    }
-
-    function stopAutoSlide() {
-        if (slideInterval) clearInterval(slideInterval);
-    }
-
-    // Event Listeners
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            nextSlide();
-            startAutoSlide();
-        });
-    }
-
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            prevSlide();
-            startAutoSlide();
-        });
-    }
-
-    dots.forEach((dot, idx) => {
-        dot.addEventListener('click', () => {
-            goToSlide(idx);
-            startAutoSlide();
-        });
-    });
-
-    // Start slideshow loop
-    startAutoSlide();
-});
 
     /* ==========================================================================
        2. Navigation & Scroll Effects
