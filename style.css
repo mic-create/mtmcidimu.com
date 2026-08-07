@@ -2640,129 +2640,147 @@ a.contact-card-box:hover .contact-card-action .arrow {
     }
 }
 
-/* ==========================================================================
-   Executive Floating Glassmorphism Navbar
-   ========================================================================== */
+/* --------------------------------------------------------------------------
+   5. Header & Navigation (Floating Pill Concept)
+   -------------------------------------------------------------------------- */
 
-/* Outer Fixed Header Wrapper */
-.header.floating-header {
+/* Header Container Overlay (Positioned Floating Top) */
+.header {
     position: fixed;
     top: 20px;
-    left: 0;
-    right: 0;
-    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    max-width: 1320px;
     z-index: 1000;
-    padding: 0 24px;
+    background: rgba(10, 25, 47, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(197, 160, 89, 0.28);
+    border-radius: 60px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.22);
+    padding: 8px 18px;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    background: transparent;
-    pointer-events: none; /* Let background clicks pass through outer padding */
 }
 
-/* Floating Rounded Container Bar */
-.floating-nav-container {
-    pointer-events: auto; /* Enable interactive clicks on bar */
-    max-width: 1280px;
-    margin: 0 auto;
-    background: rgba(15, 34, 56, 0.88); /* Navy with subtle transparency */
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(201, 164, 92, 0.3); /* Premium subtle gold border */
-    border-radius: 60px; /* Floating pill geometry */
-    padding: 12px 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+/* Scroll Effect State */
+.header.scrolled {
+    top: 10px;
+    background: rgba(6, 16, 32, 0.96);
+    border-color: rgba(197, 160, 89, 0.4);
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 5px 18px;
 }
 
-/* Brand Logo Layout */
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+/* --- LEFT: BRAND LOGO AREA --- */
 .brand-logo {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     text-decoration: none;
-}
-
-.logo-icon-box {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background: rgba(201, 164, 92, 0.12);
-    border: 1px solid rgba(201, 164, 92, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.3s ease;
-}
-
-.brand-logo:hover .logo-icon-box {
-    transform: scale(1.05);
+    flex-shrink: 0;
 }
 
 .logo-img {
-    width: 26px;
-    height: auto;
+    height: 38px;
+    width: auto;
+    transition: height 0.3s ease;
+}
+
+.header.scrolled .logo-img {
+    height: 34px;
 }
 
 .brand-text {
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
-.brand-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1rem;
+.brand-name {
+    font-family: var(--font-heading);
     font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 1px;
+    font-size: 1rem;
+    color: #FFFFFF !important;
+    letter-spacing: 0.8px;
+    line-height: 1.1;
 }
 
-.brand-subtitle {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.65rem;
+.brand-sub {
+    font-family: var(--font-body);
+    font-size: 0.58rem;
     font-weight: 600;
-    color: #C9A45C; /* Accent Gold */
+    color: var(--color-gold) !important;
     letter-spacing: 1.5px;
+    margin-top: 1px;
 }
 
-/* Navigation Menu Links */
+/* --- MIDDLE: NAVIGATION MENU --- */
+.nav-menu {
+    display: flex;
+    align-items: center;
+}
+
 .nav-list {
     display: flex;
     align-items: center;
-    gap: 28px;
+    gap: 22px;
     list-style: none;
-    margin: 0;
-    padding: 0;
+}
+
+.nav-list li {
+    position: relative;
 }
 
 .nav-link {
-    position: relative;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     font-weight: 500;
-    color: #e2e8f0;
-    text-decoration: none;
+    color: rgba(255, 255, 255, 0.88);
     padding: 6px 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+    position: relative;
+    white-space: nowrap;
     transition: color 0.3s ease;
 }
 
-/* Animated Gold Underline on Hover */
+/* Horizontal Chevron Alignment */
+.chevron-icon {
+    transition: transform 0.3s ease, stroke 0.3s ease;
+    flex-shrink: 0;
+}
+
+/* Animated Gold Underline on Hover & Active */
 .nav-link::after {
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: -1px;
     left: 0;
     width: 0%;
     height: 2px;
-    background: linear-gradient(90deg, #C9A45C, #D4AF37);
+    background-color: var(--color-gold);
     border-radius: 2px;
-    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .nav-link:hover,
 .nav-link.active {
-    color: #ffffff;
+    color: var(--color-gold);
+}
+
+.nav-link:hover .chevron-icon,
+.has-dropdown:hover .chevron-icon {
+    stroke: var(--color-gold);
+    transform: translateY(1px);
 }
 
 .nav-link:hover::after,
@@ -2770,135 +2788,260 @@ a.contact-card-box:hover .contact-card-action .arrow {
     width: 100%;
 }
 
-/* Actions Area */
+/* --- DROPDOWN MENUS --- */
+.has-dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 15px);
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: #09172A;
+    border: 1px solid rgba(197, 160, 89, 0.35);
+    border-radius: 14px;
+    padding: 10px 0;
+    min-width: 210px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1010;
+}
+
+/* Dropdown Arrow Tip */
+.dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 10px;
+    height: 10px;
+    background: #09172A;
+    border-top: 1px solid rgba(197, 160, 89, 0.35);
+    border-left: 1px solid rgba(197, 160, 89, 0.35);
+}
+
+.has-dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.dropdown-item {
+    display: block;
+    padding: 8px 20px;
+    font-size: 0.84rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.85);
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background: rgba(197, 160, 89, 0.12);
+    color: var(--color-gold);
+    padding-left: 24px;
+}
+
+/* --- RIGHT: ACTIONS (HOTLINE & BUTTON) --- */
 .nav-actions {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 14px;
+    flex-shrink: 0;
 }
 
-/* Emergency Hotline Indicator */
-.nav-emergency-link {
+/* Compact Hotline Indicator */
+.nav-hotline {
     display: flex;
     align-items: center;
-    gap: 8px;
-    color: #ef4444;
+    gap: 7px;
+    padding: 6px 10px;
+    background: rgba(220, 38, 38, 0.08);
+    border: 1px solid rgba(220, 38, 38, 0.25);
+    border-radius: 30px;
     text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    padding: 6px 12px;
-    border-radius: 20px;
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.25);
     transition: all 0.3s ease;
 }
 
-.emergency-pulse {
+.nav-hotline:hover {
+    background: rgba(220, 38, 38, 0.16);
+    border-color: rgba(220, 38, 38, 0.5);
+}
+
+.hotline-icon-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #EF4444;
+}
+
+.hotline-pulse {
+    position: absolute;
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: #ef4444;
-    box-shadow: 0 0 10px #ef4444;
-    animation: emergencyBlink 1.5s infinite;
+    background-color: #EF4444;
+    animation: pulse 1.8s infinite ease-in-out;
+    top: -2px;
+    right: -2px;
 }
 
-@keyframes emergencyBlink {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.85); }
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
 }
 
-.nav-emergency-link:hover {
-    background: rgba(239, 68, 68, 0.2);
-    transform: translateY(-1px);
+.hotline-text-wrap {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
 }
 
-/* Dominant Gold Book Appointment Pill Button */
-.btn-gold-pill {
-    background: linear-gradient(135deg, #C9A45C 0%, #D4AF37 100%);
-    color: #0F2238;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.88rem;
+.hotline-badge {
+    font-size: 0.68rem;
     font-weight: 700;
-    padding: 10px 24px;
+    color: #EF4444;
+    letter-spacing: 0.3px;
+}
+
+.hotline-label {
+    font-size: 0.62rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+/* Refined Pill Button */
+.btn-pill-gold {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    background-color: var(--color-gold);
+    color: var(--color-navy-dark);
+    font-size: 0.82rem;
+    font-weight: 600;
     border-radius: 30px;
     text-decoration: none;
-    box-shadow: 0 6px 20px rgba(201, 164, 92, 0.3);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(197, 160, 89, 0.25);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.btn-gold-pill:hover {
-    transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 10px 25px rgba(201, 164, 92, 0.5);
-    background: linear-gradient(135deg, #D4AF37 0%, #E2C167 100%);
+.btn-pill-gold:hover {
+    background-color: var(--color-gold-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.38);
 }
 
-/* ==========================================================================
-   Shrink & Enhanced Glass Effect on Scroll (JS Triggered)
-   ========================================================================== */
-
-.header.scrolled {
-    top: 10px;
+.btn-arrow {
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
 }
 
-.header.scrolled .floating-nav-container {
-    padding: 8px 22px;
-    background: rgba(10, 25, 47, 0.94); /* Stronger glass opacity on scroll */
-    backdrop-filter: blur(20px);
-    border-color: rgba(201, 164, 92, 0.5);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+.btn-pill-gold:hover .btn-arrow {
+    transform: translateX(3px);
 }
 
-.header.scrolled .logo-icon-box {
-    width: 36px;
-    height: 36px;
-}
-
-.header.scrolled .brand-title {
-    font-size: 0.92rem;
-}
-
-/* ==========================================================================
-   Mobile & Responsive Adaptations
-   ========================================================================== */
-
-.mobile-toggle {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    flex-direction: column;
-    gap: 5px;
-    padding: 4px;
-}
-
-.mobile-toggle .bar {
-    width: 22px;
-    height: 2px;
-    background-color: #ffffff;
-    border-radius: 2px;
-    transition: all 0.3s ease;
-}
-
-@media (max-width: 1024px) {
-    .nav-menu {
-        display: none; /* Handled by mobile drawer JS if triggered */
+/* --- MOBILE & TABLET RESPONSIVENESS --- */
+@media screen and (max-width: 1200px) {
+    .nav-list {
+        gap: 14px;
     }
+    .nav-link {
+        font-size: 0.82rem;
+    }
+    .brand-name {
+        font-size: 0.92rem;
+    }
+}
 
-    .emergency-text {
-        display: none;
+@media screen and (max-width: 1024px) {
+    .header {
+        top: 10px;
+        width: 96%;
+        padding: 8px 16px;
     }
 
     .mobile-toggle {
         display: flex;
+        flex-direction: column;
+        gap: 5px;
+        background: transparent;
+        cursor: pointer;
+        padding: 4px;
+        border: none;
     }
 
-    .floating-header {
-        padding: 0 12px;
-        top: 12px;
+    .mobile-toggle .bar {
+        width: 22px;
+        height: 2px;
+        background-color: #FFFFFF;
+        border-radius: 2px;
+        transition: var(--transition-fast);
     }
 
-    .floating-nav-container {
-        padding: 10px 18px;
+    /* Mobile Dropdown Menu Drawer */
+    .nav-menu {
+        position: fixed;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        background: #061020;
+        border: 1px solid rgba(197, 160, 89, 0.3);
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+    }
+
+    .nav-menu.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .nav-list {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        width: 100%;
+    }
+
+    .dropdown-menu {
+        position: static;
+        transform: none !important;
+        box-shadow: none;
+        background: rgba(255, 255, 255, 0.04);
+        margin-top: 8px;
+        width: 100%;
+        display: none;
+    }
+
+    .has-dropdown.open .dropdown-menu {
+        display: block;
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .nav-hotline {
+        display: none; /* Hide hotline text on tiny screens to preserve spacing */
+    }
+    .brand-sub {
+        display: none; /* Keep header strictly 1-line on small mobile devices */
+    }
+    .btn-pill-gold {
+        padding: 7px 14px;
+        font-size: 0.78rem;
     }
 }
