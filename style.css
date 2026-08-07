@@ -2639,3 +2639,283 @@ a.contact-card-box:hover .contact-card-action .arrow {
         justify-content: center;
     }
 }
+
+/* ==========================================================================
+   Executive Floating Glassmorphism Navbar
+   ========================================================================== */
+
+/* Outer Fixed Header Wrapper */
+.header.floating-header {
+    position: fixed;
+    top: 20px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 0 24px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    background: transparent;
+    pointer-events: none; /* Let background clicks pass through outer padding */
+}
+
+/* Floating Rounded Container Bar */
+.floating-nav-container {
+    pointer-events: auto; /* Enable interactive clicks on bar */
+    max-width: 1280px;
+    margin: 0 auto;
+    background: rgba(15, 34, 56, 0.88); /* Navy with subtle transparency */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(201, 164, 92, 0.3); /* Premium subtle gold border */
+    border-radius: 60px; /* Floating pill geometry */
+    padding: 12px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Brand Logo Layout */
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.logo-icon-box {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(201, 164, 92, 0.12);
+    border: 1px solid rgba(201, 164, 92, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.brand-logo:hover .logo-icon-box {
+    transform: scale(1.05);
+}
+
+.logo-img {
+    width: 26px;
+    height: auto;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+
+.brand-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #C9A45C; /* Accent Gold */
+    letter-spacing: 1.5px;
+}
+
+/* Navigation Menu Links */
+.nav-list {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-link {
+    position: relative;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: #e2e8f0;
+    text-decoration: none;
+    padding: 6px 0;
+    transition: color 0.3s ease;
+}
+
+/* Animated Gold Underline on Hover */
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: linear-gradient(90deg, #C9A45C, #D4AF37);
+    border-radius: 2px;
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: #ffffff;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+/* Actions Area */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Emergency Hotline Indicator */
+.nav-emergency-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ef4444;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    transition: all 0.3s ease;
+}
+
+.emergency-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #ef4444;
+    box-shadow: 0 0 10px #ef4444;
+    animation: emergencyBlink 1.5s infinite;
+}
+
+@keyframes emergencyBlink {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.nav-emergency-link:hover {
+    background: rgba(239, 68, 68, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Dominant Gold Book Appointment Pill Button */
+.btn-gold-pill {
+    background: linear-gradient(135deg, #C9A45C 0%, #D4AF37 100%);
+    color: #0F2238;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    padding: 10px 24px;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(201, 164, 92, 0.3);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+}
+
+.btn-gold-pill:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 10px 25px rgba(201, 164, 92, 0.5);
+    background: linear-gradient(135deg, #D4AF37 0%, #E2C167 100%);
+}
+
+/* ==========================================================================
+   Shrink & Enhanced Glass Effect on Scroll (JS Triggered)
+   ========================================================================== */
+
+.header.scrolled {
+    top: 10px;
+}
+
+.header.scrolled .floating-nav-container {
+    padding: 8px 22px;
+    background: rgba(10, 25, 47, 0.94); /* Stronger glass opacity on scroll */
+    backdrop-filter: blur(20px);
+    border-color: rgba(201, 164, 92, 0.5);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+}
+
+.header.scrolled .logo-icon-box {
+    width: 36px;
+    height: 36px;
+}
+
+.header.scrolled .brand-title {
+    font-size: 0.92rem;
+}
+
+/* ==========================================================================
+   Mobile & Responsive Adaptations
+   ========================================================================== */
+
+.mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+    padding: 4px;
+}
+
+.mobile-toggle .bar {
+    width: 22px;
+    height: 2px;
+    background-color: #ffffff;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 1024px) {
+    .nav-menu {
+        display: none; /* Handled by mobile drawer JS if triggered */
+    }
+
+    .emergency-text {
+        display: none;
+    }
+
+    .mobile-toggle {
+        display: flex;
+    }
+
+    .floating-header {
+        padding: 0 12px;
+        top: 12px;
+    }
+
+    .floating-nav-container {
+        padding: 10px 18px;
+    }
+}
+/* Ensure Mega Menu drops smoothly below floating navbar */
+.floating-header .has-dropdown {
+    position: static; /* Allows mega menu to span nicely across the container width */
+}
+
+.floating-header .mega-menu {
+    position: absolute;
+    top: calc(100% + 15px);
+    left: 24px;
+    right: 24px;
+    background: #0F2238;
+    border: 1px solid rgba(201, 164, 92, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    backdrop-filter: blur(16px);
+}

@@ -18,107 +18,111 @@
 
     <div class="scroll-progress-bar" id="scrollProgress"></div>
 
-    <header class="header" id="mainHeader">
-        <div class="container nav-container">
-            <a href="#" class="brand-logo">
+<header class="header floating-header" id="mainHeader">
+    <div class="floating-nav-container">
+        
+        <a href="index.html" class="brand-logo">
+            <div class="logo-icon-box">
                 <img src="images/logo.png" alt="Mother Teresa Medical Centre Logo" class="logo-img">
-                <div class="brand-text">
-                    <span class="brand-name">MOTHER TERESA</span>
-                    <span class="brand-sub">MEDICAL CENTRE, IDIMU</span>
-                </div>
+            </div>
+            <div class="brand-text">
+                <span class="brand-title">MOTHER TERESA</span>
+                <span class="brand-subtitle">MEDICAL CENTRE, IDIMU</span>
+            </div>
+        </a>
+
+        <nav class="nav-menu" id="navMenu">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="#hero" class="nav-link active">Home</a></li>
+                
+                <li class="nav-item has-dropdown mega-dropdown">
+                    <a href="about.html" class="nav-link">About Us <span class="dropdown-arrow">▾</span></a>
+                    <div class="mega-menu">
+                        <div class="mega-menu-inner">
+                            <div class="mega-menu-image">
+                                <img src="images/executives.jpg" alt="Mother Teresa Medical Centre Staff">
+                            </div>
+                            <div class="mega-menu-cols">
+                                <div class="mega-col">
+                                    <a href="about.html#who-we-are" class="mega-link active-link">Who We Are</a>
+                                    <a href="about.html#board" class="mega-link">Our Board</a>
+                                    <a href="about.html#management" class="mega-link">Our Management Team</a>
+                                    <a href="about.html#quality" class="mega-link">Quality, IPC & HSE</a>
+                                    <a href="departments.html#radiology" class="mega-link">Radiology</a>
+                                </div>
+                                <div class="mega-col">
+                                    <a href="contact.html#location" class="mega-link">Idimu Main Centre</a>
+                                    <a href="careers.html" class="mega-link">Careers</a>
+                                    <a href="careers.html#nursing" class="mega-link">Nursing Internship</a>
+                                    <a href="careers.html#housemanship" class="mega-link">Doctor Housemanship</a>
+                                    <a href="careers.html#residency" class="mega-link">Residency Radiology</a>
+                                </div>
+                                <div class="mega-col">
+                                    <a href="care-pathways.html#specialties" class="mega-link">Specialized Care</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="nav-item has-dropdown mega-dropdown">
+                    <a href="services.html" class="nav-link">Services <span class="dropdown-arrow">▾</span></a>
+                    <div class="mega-menu services-mega-menu">
+                        <div class="mega-menu-inner">
+                            <div class="mega-menu-image">
+                                <img src="images/about.png" alt="Mother Teresa Medical Centre Services">
+                            </div>
+                            <div class="mega-menu-cols">
+                                <div class="mega-col">
+                                    <a href="services.html#clinical-services" class="mega-link active-link">Clinical Services</a>
+                                    <a href="services.html#critical-care" class="mega-link">Critical Care Units</a>
+                                    <a href="services.html#dialysis" class="mega-link">Dialysis Center</a>
+                                    <a href="services.html#endoscopy" class="mega-link">Endoscopy Unit</a>
+                                    <a href="services.html#lab" class="mega-link">Laboratory</a>
+                                </div>
+                                <div class="mega-col">
+                                    <a href="services.html#pharmacy" class="mega-link">Pharmacy</a>
+                                    <a href="services.html#physiotherapy" class="mega-link">Physiotherapy</a>
+                                    <a href="services.html#wellness" class="mega-link">Preventive Health & Wellness</a>
+                                    <a href="services.html#surgery" class="mega-link">Surgical Services</a>
+                                    <a href="services.html#teleconsultation" class="mega-link">Teleconsultation</a>
+                                </div>
+                                <div class="mega-col">
+                                    <a href="services.html#wound-care" class="mega-link">Wound Care</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="nav-item"><a href="#departments" class="nav-link">Departments</a></li>
+                <li class="nav-item"><a href="#specialists" class="nav-link">Specialists</a></li>
+                <li class="nav-item"><a href="#facilities" class="nav-link">Facilities</a></li>
+                <li class="nav-item"><a href="#articles" class="nav-link">Articles</a></li>
+                <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </nav>
+
+        <div class="nav-actions">
+            <a href="tel:+234800668437" class="nav-emergency-link" title="24/7 Emergency Hotline">
+                <span class="emergency-pulse"></span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                <span class="emergency-text">24/7 Hotline</span>
             </a>
 
-            <nav class="nav-menu" id="navMenu">
-                <ul class="nav-list">
-                    <li><a href="#hero" class="nav-link active">Home</a></li>
-                    <li class="has-dropdown mega-dropdown">
-                        <a href="about.html" class="nav-link">About Us <span class="dropdown-arrow">▾</span></a>
-    
-                        <div class="mega-menu">
-                            <div class="mega-menu-inner">
-            
-                                <div class="mega-menu-image">
-                                    <img src="images/executives.jpg" alt="Mother Teresa Medical Centre Staff">
-                                </div>
+            <a href="#appointment" class="btn-gold-pill">Book Appointment</a>
 
-                                <div class="mega-menu-cols">
-                                    <div class="mega-col">
-                                        <a href="about.html#who-we-are" class="mega-link active-link">Who We Are</a>
-                                        <a href="about.html#board" class="mega-link">Our Board</a>
-                                        <a href="about.html#management" class="mega-link">Our Management Team</a>
-                                        <a href="about.html#quality" class="mega-link">Quality, IPC & HSE</a>
-                                        <a href="departments.html#radiology" class="mega-link">Radiology</a>
-                                    </div>
-
-                                    <div class="mega-col">
-                                        <a href="contact.html#location" class="mega-link">Idimu Main Centre</a>
-                                        <a href="careers.html" class="mega-link">Careers</a>
-                                        <a href="careers.html#nursing" class="mega-link">Nursing Internship</a>
-                                        <a href="careers.html#housemanship" class="mega-link">Doctor Housemanship</a>
-                                        <a href="careers.html#residency" class="mega-link">Residency Radiology</a>
-                                    </div>
-
-                                    <div class="mega-col">
-                                        <a href="care-pathways.html#specialties" class="mega-link">Specialized Care</a>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </li>
-                    <li class="has-dropdown mega-dropdown">
-                        <a href="services.html" class="nav-link">Services <span class="dropdown-arrow">▾</span></a>
-    
-                        <div class="mega-menu services-mega-menu">
-                            <div class="mega-menu-inner">
-            
-                                <div class="mega-menu-image">
-                                    <img src="images/about.png" alt="Mother Teresa Medical Centre Services">
-                                </div>
-
-                                <div class="mega-menu-cols">
-                                    <div class="mega-col">
-                                        <a href="services.html#clinical-services" class="mega-link active-link">Clinical Services</a>
-                                        <a href="services.html#critical-care" class="mega-link">Critical Care Units</a>
-                                        <a href="services.html#dialysis" class="mega-link">Dialysis Center</a>
-                                        <a href="services.html#endoscopy" class="mega-link">Endoscopy Unit</a>
-                                        <a href="services.html#lab" class="mega-link">Laboratory</a>
-                                    </div>
-
-                                    <div class="mega-col">
-                                        <a href="services.html#pharmacy" class="mega-link">Pharmacy</a>
-                                        <a href="services.html#physiotherapy" class="mega-link">Physiotherapy</a>
-                                        <a href="services.html#wellness" class="mega-link">Preventive Health & Wellness</a>
-                                        <a href="services.html#surgery" class="mega-link">Surgical Services</a>
-                                        <a href="services.html#teleconsultation" class="mega-link">Teleconsultation</a>
-                                    </div>
-
-                                    <div class="mega-col">
-                                        <a href="services.html#wound-care" class="mega-link">Wound Care</a>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </li>
-                    <li><a href="#departments" class="nav-link">Departments</a></li>
-                    <li><a href="#specialists" class="nav-link">Specialists</a></li>
-                    <li><a href="#facilities" class="nav-link">Facilities</a></li>
-                    <li><a href="#articles" class="nav-link">Articles</a></li>
-                    <li><a href="#contact" class="nav-link">Contact</a></li>
-                </ul>
-            </nav>
-
-            <div class="nav-actions">
-                <a href="#appointment" class="btn btn-gold">Book Appointment</a>
-                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </button>
-            </div>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
         </div>
-    </header>
+
+    </div>
+</header>
 
     <section class="hero" id="hero">
         <div class="hero-slideshow">
