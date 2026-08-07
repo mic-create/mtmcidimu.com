@@ -419,7 +419,7 @@ button, input, select, textarea {
 }
 
 /* --------------------------------------------------------------------------
-   6. Hero Section
+   6. Hero Section & Synchronized Dynamic Text Transitions
    -------------------------------------------------------------------------- */
 .hero {
     position: relative;
@@ -431,7 +431,16 @@ button, input, select, textarea {
     padding-bottom: 80px;
 }
 
-.hero-bg {
+.hero-slideshow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.hero-slide {
     position: absolute;
     top: 0;
     left: 0;
@@ -439,8 +448,16 @@ button, input, select, textarea {
     height: 100%;
     background-size: cover;
     background-position: center;
-    transform: scale(1.05);
-    transition: transform 6s ease-out;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transform: scale(1.08);
+    transition: opacity 1.5s ease-in-out, transform 6s ease-out;
+}
+
+.hero-slide.active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 1;
 }
 
 .hero-overlay {
@@ -450,6 +467,7 @@ button, input, select, textarea {
     width: 100%;
     height: 100%;
     background: linear-gradient(90deg, rgba(10, 25, 47, 0.94) 0%, rgba(10, 25, 47, 0.7) 60%, rgba(10, 25, 47, 0.4) 100%);
+    z-index: 1;
 }
 
 .hero-content {
@@ -472,6 +490,30 @@ button, input, select, textarea {
     margin-bottom: 25px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
+}
+
+.hero-text-slideshow {
+    position: relative;
+    min-height: 220px;
+    margin-bottom: 20px;
+}
+
+.hero-text-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+    pointer-events: none;
+}
+
+.hero-text-slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    position: relative;
 }
 
 .hero-title {
@@ -1295,61 +1337,4 @@ button, input, select, textarea {
     .sub-img { display: none; }
 
     .appointment-form-wrapper { padding: 25px; }
-}
-
-/* --------------------------------------------------------------------------
-   Hero Slideshow Animations
-   -------------------------------------------------------------------------- */
-.hero-slideshow {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-}
-
-.hero-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    opacity: 0;
-    transform: scale(1.08);
-    transition: opacity 1.5s ease-in-out, transform 6s ease-out;
-}
-
-.hero-slide.active {
-    opacity: 1;
-    transform: scale(1);
-}
-
-/* --------------------------------------------------------------------------
-   Hero Dynamic Text Transitions
-   -------------------------------------------------------------------------- */
-.hero-text-slideshow {
-    position: relative;
-    min-height: 220px; /* Reserves height so buttons don't jump around */
-    margin-bottom: 20px;
-}
-
-.hero-text-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
-    pointer-events: none;
-}
-
-.hero-text-slide.active {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-    position: relative; /* Keeps flow stable when active */
 }
