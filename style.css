@@ -674,59 +674,267 @@ button, input, select, textarea {
     font-size: 0.95rem;
 }
 
-/* --------------------------------------------------------------------------
-   10. Clinical Departments Section
-   -------------------------------------------------------------------------- */
-.departments {
-    background-color: var(--color-light-grey);
-}
+/* ==========================================================================
+   Clinical Departments - Vertical Timeline Layout
+   ========================================================================== */
 
-.department-card {
-    background: var(--color-white);
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    transition: var(--transition-fast);
-    border: 1px solid var(--color-mid-grey);
-}
-
-.department-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(10, 25, 47, 0.12);
-}
-
-.dept-image {
-    height: 220px;
+.departments-timeline-section {
+    position: relative;
+    background-color: #081424; /* Deep Navy Background */
+    padding: 100px 0;
+    color: #ffffff;
     overflow: hidden;
 }
 
-.dept-image img {
-    width: 100%;
-    height: 100%;
-    transition: transform 0.6s ease;
+.timeline-bg-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 800px;
+    background: radial-gradient(ellipse, rgba(201, 164, 92, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+    filter: blur(80px);
 }
 
-.department-card:hover .dept-image img {
-    transform: scale(1.08);
+.departments-header {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 70px auto;
 }
 
-.dept-content {
-    padding: 25px;
+.departments-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #C9A45C;
+    margin-bottom: 14px;
 }
 
-.dept-content h3 {
-    font-family: var(--font-heading);
-    font-size: 1.25rem;
-    color: var(--color-navy);
-    margin-bottom: 10px;
+.departments-title {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 16px;
 }
 
-.dept-content p {
-    color: var(--color-muted-grey);
-    font-size: 0.9rem;
+.serif-gold {
+    font-style: italic;
+    color: #C9A45C;
+    font-weight: 400;
+}
+
+.departments-subtitle {
+    font-size: 0.98rem;
+    color: #94a3b8;
     line-height: 1.6;
 }
 
+/* Timeline Base */
+.departments-timeline {
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Center Vertical Line */
+.timeline-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background: linear-gradient(180deg, rgba(201, 164, 92, 0.1) 0%, #C9A45C 50%, rgba(201, 164, 92, 0.1) 100%);
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+/* Timeline Rows */
+.timeline-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 60px;
+    position: relative;
+    z-index: 2;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Alternate Alignment */
+.timeline-left {
+    justify-content: flex-end;
+}
+
+.timeline-right {
+    justify-content: flex-start;
+}
+
+.timeline-left .timeline-content {
+    margin-right: 50px;
+    text-align: right;
+    flex-direction: row-reverse;
+}
+
+.timeline-right .timeline-content {
+    margin-left: 50px;
+    text-align: left;
+    flex-direction: row;
+}
+
+/* Content Box */
+.timeline-content {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    width: 45%;
+    background: rgba(15, 30, 52, 0.7);
+    border: 1px solid rgba(201, 164, 92, 0.2);
+    border-radius: 20px;
+    padding: 24px;
+    backdrop-filter: blur(12px);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.timeline-content:hover {
+    transform: translateY(-50px scale(1.02));
+    border-color: rgba(201, 164, 92, 0.5);
+    background: rgba(18, 38, 66, 0.9);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+/* Image & Number Container */
+.timeline-image-box {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    border-radius: 16px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid rgba(201, 164, 92, 0.3);
+}
+
+.timeline-image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.timeline-content:hover .timeline-image-box img {
+    transform: scale(1.1);
+}
+
+.timeline-number {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #C9A45C;
+    color: #081424;
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-top-left-radius: 8px;
+}
+
+/* Typography inside timeline */
+.timeline-text h3 {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0 0 8px 0;
+}
+
+.timeline-text p {
+    font-size: 0.86rem;
+    color: #94a3b8;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Center Node / Bullet Point */
+.timeline-node {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #081424;
+    border: 3px solid #C9A45C;
+    box-shadow: 0 0 10px rgba(201, 164, 92, 0.5);
+    z-index: 3;
+    transition: all 0.3s ease;
+}
+
+.timeline-item:hover .timeline-node {
+    background: #C9A45C;
+    scale: 1.3;
+}
+
+/* Scroll Animation Styles */
+.reveal-on-scroll {
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.timeline-left.reveal-on-scroll {
+    transform: translateX(-50px);
+}
+
+.timeline-right.reveal-on-scroll {
+    transform: translateX(50px);
+}
+
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Responsive Styles for Mobile and Tablets */
+@media (max-width: 900px) {
+    .timeline-line {
+        left: 20px;
+    }
+
+    .timeline-node {
+        left: 20px;
+    }
+
+    .timeline-item {
+        justify-content: flex-start;
+    }
+
+    .timeline-left .timeline-content,
+    .timeline-right .timeline-content {
+        width: calc(100% - 60px);
+        margin-left: 60px;
+        margin-right: 0;
+        text-align: left;
+        flex-direction: row;
+    }
+}
+
+@media (max-width: 550px) {
+    .timeline-content {
+        flex-direction: column !important;
+        align-items: flex-start;
+        padding: 18px;
+    }
+
+    .timeline-image-box {
+        width: 100%;
+        height: 140px;
+    }
+}
 /* --------------------------------------------------------------------------
    11. Specialist Doctors Section
    -------------------------------------------------------------------------- */

@@ -287,3 +287,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const scrollItems = document.querySelectorAll('.reveal-on-scroll');
+
+    if (!scrollItems.length) return;
+
+    const observerOptions = {
+        threshold: 0.25,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const scrollObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                // Optional: Stop observing once revealed
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    scrollItems.forEach(item => scrollObserver.observe(item));
+});
