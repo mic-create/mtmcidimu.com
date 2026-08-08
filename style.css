@@ -2648,71 +2648,67 @@ a.contact-card-box:hover .contact-card-action .arrow {
    Standards of Care Section (With Custom Image Background)
    ========================================================================== */
 
+/* ==========================================================================
+   Asymmetric Layout - Standards of Care Section
+   ========================================================================== */
+
 .standards-section {
     position: relative;
-    /* Dark luxury overlay blended with your background image */
-    background: linear-gradient(135deg, rgba(8, 20, 36, 0.92) 0%, rgba(11, 25, 44, 0.88) 100%),
+    background: linear-gradient(135deg, rgba(8, 20, 36, 0.94) 0%, rgba(11, 25, 44, 0.90) 100%),
                 url('images/about.png') center/cover no-repeat;
     padding: 100px 0;
-    overflow: hidden;
     color: #ffffff;
+    overflow: hidden;
 }
 
-/* Background Atmosphere */
 .standards-bg-pattern {
     position: absolute;
     inset: 0;
     background-image: radial-gradient(rgba(201, 164, 92, 0.08) 1px, transparent 1px);
-    background-size: 36px 36px;
+    background-size: 32px 32px;
     pointer-events: none;
 }
 
-.standards-bg-glow {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 800px;
-    height: 400px;
-    background: radial-gradient(ellipse, rgba(201, 164, 92, 0.12) 0%, transparent 70%);
-    filter: blur(100px);
-    pointer-events: none;
-}
-
-/* Header Styling */
-.standards-header {
-    text-align: center;
-    max-width: 760px;
-    margin: 0 auto 60px auto;
+/* Two-Column Asymmetric Layout Grid */
+.standards-layout {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 60px;
+    align-items: start;
     position: relative;
     z-index: 2;
+}
+
+/* Left Column Styling */
+.standards-showcase {
+    position: sticky;
+    top: 100px;
 }
 
 .standards-eyebrow {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     font-size: 0.75rem;
     font-weight: 600;
-    letter-spacing: 2.5px;
+    letter-spacing: 2px;
     color: #C9A45C;
     margin-bottom: 16px;
 }
 
 .gold-dot {
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background-color: #C9A45C;
 }
 
 .standards-title {
     font-family: var(--font-heading, 'Playfair Display', serif);
-    font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+    font-size: clamp(2.4rem, 3.5vw, 3.2rem);
     font-weight: 700;
-    color: #ffffff;
-    line-height: 1.2;
-    margin-bottom: 18px;
+    line-height: 1.15;
+    margin-bottom: 20px;
 }
 
 .serif-gold {
@@ -2722,127 +2718,138 @@ a.contact-card-box:hover .contact-card-action .arrow {
 }
 
 .standards-subtitle {
-    font-size: 1rem;
+    font-size: 0.98rem;
     color: #94a3b8;
-    line-height: 1.6;
+    line-height: 1.65;
+    margin-bottom: 32px;
 }
 
-/* Grid Layout */
-.standards-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-    position: relative;
-    z-index: 2;
+/* Quote Card Overlay */
+.showcase-card {
+    background: rgba(15, 30, 52, 0.7);
+    border: 1px solid rgba(201, 164, 92, 0.3);
+    border-left: 3px solid #C9A45C;
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(12px);
 }
 
-/* Individual Card Styling */
-.standards-card {
-    position: relative;
-    background: rgba(15, 30, 52, 0.65);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(201, 164, 92, 0.18);
-    border-radius: 20px;
-    padding: 36px 26px;
-    display: flex;
-    flex-direction: column;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.standards-card:hover {
-    transform: translateY(-8px);
-    background: rgba(18, 38, 66, 0.85);
-    border-color: rgba(201, 164, 92, 0.45);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-}
-
-/* Featured Center Card Highlight */
-.standards-card.active-featured {
-    border-color: rgba(201, 164, 92, 0.4);
-    background: rgba(20, 42, 72, 0.8);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
-}
-
-.card-badge {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    font-size: 0.62rem;
+.showcase-badge {
+    font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 1px;
-    color: #081424;
-    background: #C9A45C;
-    padding: 3px 8px;
-    border-radius: 10px;
+    color: #C9A45C;
+    margin-bottom: 10px;
 }
 
-/* Icon Box */
-.card-icon-wrapper {
-    width: 54px;
-    height: 54px;
-    border-radius: 14px;
+.showcase-quote {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 1.05rem;
+    font-style: italic;
+    color: #e2e8f0;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Right Column: Horizontal Feature Rows */
+.standards-features {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.feature-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(15, 30, 52, 0.6);
+    border: 1px solid rgba(201, 164, 92, 0.18);
+    border-radius: 18px;
+    padding: 24px;
+    backdrop-filter: blur(12px);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.feature-row:hover {
+    transform: translateX(8px);
+    background: rgba(18, 38, 66, 0.85);
+    border-color: rgba(201, 164, 92, 0.45);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.feature-row.featured {
+    border-color: rgba(201, 164, 92, 0.35);
+    background: rgba(20, 42, 72, 0.75);
+}
+
+.feature-number {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: rgba(201, 164, 92, 0.4);
+    transition: color 0.3s ease;
+}
+
+.feature-row:hover .feature-number {
+    color: #C9A45C;
+}
+
+.feature-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
     background: rgba(201, 164, 92, 0.1);
     border: 1px solid rgba(201, 164, 92, 0.25);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 24px;
+    flex-shrink: 0;
     transition: all 0.3s ease;
 }
 
-.standards-card:hover .card-icon-wrapper {
+.feature-row:hover .feature-icon-box {
     background: #C9A45C;
 }
 
-.standards-card:hover .card-icon-wrapper svg {
+.feature-row:hover .feature-icon-box svg {
     stroke: #081424;
 }
 
-/* Typography Inside Cards */
-.card-title {
+.feature-details h3 {
     font-family: var(--font-heading, 'Playfair Display', serif);
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 600;
     color: #ffffff;
-    margin-bottom: 12px;
+    margin: 0 0 6px 0;
 }
 
-.card-description {
-    font-size: 0.88rem;
+.feature-details p {
+    font-size: 0.86rem;
     color: #94a3b8;
-    line-height: 1.6;
-    margin-bottom: 20px;
-    flex-grow: 1;
+    line-height: 1.5;
+    margin: 0;
 }
 
-/* Decorative Gold Bottom Bar Animation */
-.card-gold-bar {
-    width: 30px;
-    height: 2px;
-    background: #C9A45C;
-    border-radius: 2px;
-    transition: width 0.3s ease;
-}
-
-.standards-card:hover .card-gold-bar {
-    width: 100%;
-}
-
-/* Responsive Scaling */
-@media (max-width: 1200px) {
-    .standards-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-    }
-}
-
-@media (max-width: 640px) {
-    .standards-grid {
+/* Responsive Adaptations */
+@media (max-width: 1024px) {
+    .standards-layout {
         grid-template-columns: 1fr;
+        gap: 40px;
     }
     
-    .standards-section {
-        padding: 60px 0;
+    .standards-showcase {
+        position: static;
+    }
+}
+
+@media (max-width: 600px) {
+    .feature-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .feature-number {
+        font-size: 1.1rem;
     }
 }
