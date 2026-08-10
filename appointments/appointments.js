@@ -488,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Endpoint path: POST /api/appointments
      */
     async function submitAppointmentAPI(payload) {
-        const API_BASE_URL = 'http://127.0.0.1:5000';
+        const API_BASE_URL = 'https://mtmc-backend.onrender.com';
 
         const requestBody = {
             department: payload.department,
