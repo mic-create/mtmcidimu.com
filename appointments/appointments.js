@@ -488,48 +488,48 @@ document.addEventListener('DOMContentLoaded', () => {
      * Endpoint path: POST /api/appointments
      */
     async function submitAppointmentAPI(payload) {
-    const API_BASE_URL = 'http://127.0.0.1:5000';
+        const API_BASE_URL = 'http://127.0.0.1:5000';
 
-    const requestBody = {
-        department: payload.department,
-        selected_doctor: payload.doctor,
-        appointment_date: payload.date,
-        appointment_time: payload.time,
+        const requestBody = {
+            department: payload.department,
+            selected_doctor: payload.doctor,
+            appointment_date: payload.date,
+            appointment_time: payload.time,
 
-        patientDetails: {
-            firstName: payload.patientDetails.firstName,
-            lastName: payload.patientDetails.lastName,
-            email: payload.patientDetails.email,
-            phone: payload.patientDetails.phone,
-            dob: payload.patientDetails.dob,
-            gender: payload.patientDetails.gender,
-            address: payload.patientDetails.address
-        },
-
-        reason: payload.patientDetails.reason || 'General Consultation',
-        appointment_type: 'In-Person'
-    };
-
-    const response = await fetch(
-        `${API_BASE_URL}/api/appointments`,
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
+            patientDetails: {
+                firstName: payload.patientDetails.firstName,
+                lastName: payload.patientDetails.lastName,
+                email: payload.patientDetails.email,
+                phone: payload.patientDetails.phone,
+                dob: payload.patientDetails.dob,
+                gender: payload.patientDetails.gender,
+                address: payload.patientDetails.address
             },
-            body: JSON.stringify(requestBody)
-        }
-    );
 
-    const result = await response.json();
+            reason: payload.patientDetails.reason || 'General Consultation',
+            appointment_type: 'In-Person'
+        };
 
-    if (!response.ok || !result.success) {
-        throw new Error(
-            result.message || 'Unable to create appointment.'
+        const response = await fetch(
+            `${API_BASE_URL}/api/appointments`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            }
         );
-    }
 
-    return {
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(
+                result.message || 'Unable to create appointment.'
+            );
+        }
+
+        return {
         success: true,
 
         // Use the real database appointment ID
@@ -538,16 +538,6 @@ document.addEventListener('DOMContentLoaded', () => {
         appointment: result.appointment
     };
 }
-
-        // Frontend Prototype Delay & Mock Response
-        await new Promise(resolve => setTimeout(resolve, 1200));
-
-        const randomRef = 'MTMC-' + Math.floor(100000 + Math.random() * 900000);
-        return {
-            success: true,
-            referenceCode: randomRef
-        };
-    }
 
     /* ==========================================================================
        11. Confirmation Screen View
