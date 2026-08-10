@@ -488,17 +488,56 @@ document.addEventListener('DOMContentLoaded', () => {
      * Endpoint path: POST /api/appointments
      */
     async function submitAppointmentAPI(payload) {
-        /*
-        // Future Flask Fetch Implementation:
-        const response = await fetch('/api/appointments', {
+    const API_BASE_URL = 'http://127.0.0.1:5000';
+
+    const requestBody = {
+        department: payload.department,
+        selected_doctor: payload.doctor,
+        appointment_date: payload.date,
+        appointment_time: payload.time,
+
+        patientDetails: {
+            firstName: payload.patientDetails.firstName,
+            lastName: payload.patientDetails.lastName,
+            email: payload.patientDetails.email,
+            phone: payload.patientDetails.phone,
+            dob: payload.patientDetails.dob,
+            gender: payload.patientDetails.gender,
+            address: payload.patientDetails.address
+        },
+
+        reason: payload.patientDetails.reason || 'General Consultation',
+        appointment_type: 'In-Person'
+    };
+
+    const response = await fetch(
+        `${API_BASE_URL}/api/appointments`,
+        {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(payload)
-        });
-        return await response.json();
-        */
+            body: JSON.stringify(requestBody)
+        }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+        throw new Error(
+            result.message || 'Unable to create appointment.'
+        );
+    }
+
+    return {
+        success: true,
+
+        // Use the real database appointment ID
+        referenceCode: `MTMC-${String(result.appointment.id).padStart(6, '0')}`,
+
+        appointment: result.appointment
+    };
+}
 
         // Frontend Prototype Delay & Mock Response
         await new Promise(resolve => setTimeout(resolve, 1200));
