@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Schedule a consultation with leading medical specialists at Mother Teresa Medical Centre, Idimu, Lagos. Experience elite, patient-centered private healthcare.">
+    <title>Book an Appointment | Mother Teresa Medical Centre</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="appointments.css">
+    
+    <script src="appointments.js" defer></script>
+</head>
+<body>
+
+    <button id="backToTopBtn" class="back-to-top" aria-label="Back to top">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+    </button>
+
+    <header class="site-header" id="siteHeader">
+        <div class="container header-container">
+            <a href="index.html" class="brand-logo" aria-label="Mother Teresa Medical Centre Home">
+                <div class="logo-emblem">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20M2 12h20M12 6a6 6 0 0 0-6 6c0 3.3 2.7 6 6 6s6-2.7 6-6a6 6 0 0 0-6-6z"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">MOTHER TERESA</span>
+                    <span class="brand-sub">MEDICAL CENTRE, IDIMU</span>
+                </div>
+            </a>
+
+            <nav class="main-nav" id="mainNav" aria-label="Main Navigation">
+                <ul class="nav-list">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="index.html#about" class="nav-link">About Us</a></li>
+                    <li><a href="index.html#services" class="nav-link">Services</a></li>
+                    <li><a href="index.html#departments" class="nav-link">Departments</a></li>
+                    <li><a href="index.html#specialists" class="nav-link">Doctors</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <a href="appointments.html" class="btn btn-primary-gold btn-nav active" aria-current="page">
+                    <span>Book Appointment</span>
+                </a>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Menu" aria-expanded="false" aria-controls="mainNav">
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="appointment-hero">
+            <div class="hero-bg-overlay"></div>
+            <div class="container hero-container">
+                <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+                    <ol class="breadcrumb">
+                        <li><a href="index.html">Home</a></li>
+                        <li class="separator">/</li>
+                        <li aria-current="page">Appointments</li>
+                    </ol>
+                </nav>
+                <div class="hero-text-content">
+                    <span class="hero-badge-pill">Private Medical Consultation</span>
+                    <h1 class="hero-title">Your Health Deserves <span class="serif-gold">Exceptional Care</span></h1>
+                    <p class="hero-description">
+                        Schedule a private consultation with our distinguished consultants and medical team. Experience clinical excellence rooted in faith, compassion, and innovation.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="booking-section" id="bookingPortal">
+            <div class="container">
+                <div class="booking-card-wrapper">
+                    
+                    <div class="stepper-header" role="tablist" aria-label="Appointment Progress">
+                        <div class="step-indicator active" id="stepIndicator1" data-step="1">
+                            <div class="step-circle">
+                                <span class="step-num">01</span>
+                                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <span class="step-label">Service</span>
+                        </div>
+                        <div class="stepper-line"></div>
+
+                        <div class="step-indicator" id="stepIndicator2" data-step="2">
+                            <div class="step-circle">
+                                <span class="step-num">02</span>
+                                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <span class="step-label">Doctor</span>
+                        </div>
+                        <div class="stepper-line"></div>
+
+                        <div class="step-indicator" id="stepIndicator3" data-step="3">
+                            <div class="step-circle">
+                                <span class="step-num">03</span>
+                                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <span class="step-label">Schedule</span>
+                        </div>
+                        <div class="stepper-line"></div>
+
+                        <div class="step-indicator" id="stepIndicator4" data-step="4">
+                            <div class="step-circle">
+                                <span class="step-num">04</span>
+                                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <span class="step-label">Details</span>
+                        </div>
+                    </div>
+
+                    <form id="appointmentForm" class="booking-form" novalidate>
+                        
+                        <div class="step-panel active" id="stepPanel1" data-panel="1">
+                            <div class="step-title-block">
+                                <h2>Select Clinical Specialty</h2>
+                                <p>Choose the medical department or specialty for your consultation.</p>
+                            </div>
+
+                            <div class="services-grid">
+                                <label class="service-card">
+                                    <input type="radio" name="department" value="General Medicine" class="sr-only" required>
+                                    <div class="card-inner">
+                                        <div class="card-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                        </div>
+                                        <div class="card-content">
+                                            <h3>General Medicine</h3>
+                                            <p>Comprehensive health evaluations, routine checkups, and primary illness care.</p>
+                                        </div>
+                                        <div class="select-indicator"></div>
+                                    </div>
+                                </label>
+
+                                <label class="service-card">
+                                    <input type="radio" name="department" value="Cardiology" class="sr-only">
+                                    <div class="card-inner">
+                                        <div class="card-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                                        </div>
+                                        <div class="card-content">
+                                            <h3>Cardiology</h3>
+                                            <p>Advanced cardiovascular screenings, ECG, and specialized heart management.</p>
+                                        </div>
+                                        <div class="select-indicator"></div>
+                                    </div>
+                                </label>
+
+                                <label class="service-card">
+                                    <input type="radio" name="department" value="Pediatrics" class="sr-only">
+                                    <div class="card-inner">
+                                        <div class="card-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/><path d="M9 10h0.01"/><path d="M15 10h0.01"/><path d="M10 15c.5.5 1.5 1 2 1s1.5-.5 2-1"/></svg>
+                                        </div>
+                                        <div class="card-content">
+                                            <h3>Pediatrics</h3>
+                                            <p>Gentle, specialized medical care tailored for infants, children, and teenagers.</p>
+                                        </div>
+                                        <div class="select-indicator"></div>
+                                    </div>
+                                </label>
+
+                                <label class="service-card">
+                                    <input type="radio" name="department" value="Obstetrics & Gynecology" class="sr-only">
+                                    <div class="card-inner">
+                                        <div class="card-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                                        </div>
+                                        <div class="card-content">
+                                            <h3>Obstetrics & Gynecology</h3>
+                                            <p>Maternal healthcare, antenatal packages, and comprehensive women's health.</p>
+                                        </div>
+                                        <div class="select-indicator"></div>
+                                    </div>
+                                </label>
+
+                                <label class="service-card">
+                                    <input type="radio" name="department" value="Neurology" class="sr-only">
+                                    <div class="card-inner">
+                                        <div class="card-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg>
+                                        </div>
+                                        <div class="card-content">
+                                            <h3>Neurology</h3>
+                                            <p>Diagnosis and treatment for disorders of the nervous system and brain care.</p>
+                                        </div>
+                                        <div class="select-indicator"></div>
+                                    </div>
+                                </label>
+
+                                <label class="service-card">
+                                    <input type="radio" name="department" value="Orthopaedics" class="sr-only">
+                                    <div class="card-inner">
+                                        <div class="card-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+                                        </div>
+                                        <div class="card-content">
+                                            <h3>Orthopaedics</h3>
+                                            <p>Bone, joint, and spinal healthcare including sports injury rehabilitation.</p>
+                                        </div>
+                                        <div class="select-indicator"></div>
+                                    </div>
+                                </label>
+
+                                <label class="service-card">
+                                    <input type="radio" name="department" value="Radiology" class="sr-only">
+                                    <div class="card-inner">
+                                        <div class="card-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/></svg>
+                                        </div>
+                                        <div class="card-content">
+                                            <h3>Radiology & Imaging</h3>
+                                            <p>Digital X-rays, 3D/4D Ultrasound scans, and high-precision diagnostic imaging.</p>
+                                        </div>
+                                        <div class="select-indicator"></div>
+                                    </div>
+                                </label>
+
+                                <label class="service-card">
+                                    <input type="radio" name="department" value="Laboratory" class="sr-only">
+                                    <div class="card-inner">
+                                        <div class="card-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55A2 2 0 0 0 6.508 23h10.984a2 2 0 0 0 1.787-2.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><line x1="8.5" y1="2" x2="15.5" y2="2"/></svg>
+                                        </div>
+                                        <div class="card-content">
+                                            <h3>Laboratory Diagnostics</h3>
+                                            <p>Automated clinical pathology, rapid diagnostic tests, and health screens.</p>
+                                        </div>
+                                        <div class="select-indicator"></div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="step-validation-msg" id="step1Error">Please select a medical department to proceed.</div>
+
+                            <div class="step-actions right-only">
+                                <button type="button" class="btn btn-gold btn-next" data-next="2">
+                                    <span>Continue to Doctor Selection</span>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="step-panel" id="stepPanel2" data-panel="2">
+                            <div class="step-title-block">
+                                <h2>Choose a Medical Consultant</h2>
+                                <p>Select an available specialist or opt for the first available doctor in your chosen department.</p>
+                            </div>
+
+                            <div class="doctors-grid">
+                                <label class="doctor-card">
+                                    <input type="radio" name="selected_doctor" value="First Available Consultant" class="sr-only" required>
+                                    <div class="doctor-card-inner">
+                                        <div class="doctor-avatar placeholder-avatar">
+                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                        </div>
+                                        <div class="doctor-info">
+                                            <span class="doctor-badge">Recommended</span>
+                                            <h3>First Available Specialist</h3>
+                                            <p class="doctor-spec">Automated Priority Booking</p>
+                                            <p class="doctor-exp">Assigns the earliest available consultant.</p>
+                                        </div>
+                                        <div class="doctor-select-btn">Select</div>
+                                    </div>
+                                </label>
+
+                                <label class="doctor-card">
+                                    <input type="radio" name="selected_doctor" value="Dr. Emmanuel Adebayo (Cardiology)" class="sr-only">
+                                    <div class="doctor-card-inner">
+                                        <div class="doctor-avatar">
+                                            <img src="images/doctor1.jpg" alt="Dr. Emmanuel Adebayo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23C9A45C\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2\'/></svg>'">
+                                        </div>
+                                        <div class="doctor-info">
+                                            <span class="availability-status available"><span class="dot"></span> Available This Week</span>
+                                            <h3>Dr. Emmanuel Adebayo</h3>
+                                            <p class="doctor-spec">Senior Consultant Cardiologist</p>
+                                            <p class="doctor-exp">16+ Years Clinical Experience</p>
+                                        </div>
+                                        <div class="doctor-select-btn">Select</div>
+                                    </div>
+                                </label>
+
+                                <label class="doctor-card">
+                                    <input type="radio" name="selected_doctor" value="Dr. Grace Okonjo (Pediatrics)" class="sr-only">
+                                    <div class="doctor-card-inner">
+                                        <div class="doctor-avatar">
+                                            <img src="images/doctor2.jpg" alt="Dr. Grace Okonjo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23C9A45C\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2\'/></svg>'">
+                                        </div>
+                                        <div class="doctor-info">
+                                            <span class="availability-status available"><span class="dot"></span> Available Today</span>
+                                            <h3>Dr. Grace Okonjo</h3>
+                                            <p class="doctor-spec">Head of Pediatric Care</p>
+                                            <p class="doctor-exp">12+ Years Clinical Experience</p>
+                                        </div>
+                                        <div class="doctor-select-btn">Select</div>
+                                    </div>
+                                </label>
+
+                                <label class="doctor-card">
+                                    <input type="radio" name="selected_doctor" value="Dr. Kenneth Nwosu (Obstetrics)" class="sr-only">
+                                    <div class="doctor-card-inner">
+                                        <div class="doctor-avatar">
+                                            <img src="images/doctor3.jpg" alt="Dr. Kenneth Nwosu" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23C9A45C\' stroke-width=\'1.5\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2\'/></svg>'">
+                                        </div>
+                                        <div class="doctor-info">
+                                            <span class="availability-status available"><span class="dot"></span> Available Tomorrow</span>
+                                            <h3>Dr. Kenneth Nwosu</h3>
+                                            <p class="doctor-spec">Consultant Gynecologist</p>
+                                            <p class="doctor-exp">14+ Years Clinical Experience</p>
+                                        </div>
+                                        <div class="doctor-select-btn">Select</div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="step-validation-msg" id="step2Error">Please select a doctor or choice to proceed.</div>
+
+                            <div class="step-actions split">
+                                <button type="button" class="btn btn-outline btn-prev" data-prev="1">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                    <span>Back</span>
+                                </button>
+                                <button type="button" class="btn btn-gold btn-next" data-next="3">
+                                    <span>Continue to Schedule</span>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="step-panel" id="stepPanel3" data-panel="3">
+                            <div class="step-title-block">
+                                <h2>Select Appointment Date & Time</h2>
+                                <p>Choose a convenient date and an available consultation time slot.</p>
+                            </div>
+
+                            <div class="schedule-container">
+                                <div class="calendar-widget">
+                                    <div class="calendar-header">
+                                        <button type="button" class="cal-nav-btn" id="calPrevMonth" aria-label="Previous Month">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                        </button>
+                                        <h3 class="calendar-month-title" id="calMonthTitle">August 2026</h3>
+                                        <button type="button" class="cal-nav-btn" id="calNextMonth" aria-label="Next Month">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                        </button>
+                                    </div>
+
+                                    <div class="calendar-weekdays">
+                                        <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                                    </div>
+
+                                    <div class="calendar-days-grid" id="calendarDays">
+                                        </div>
+
+                                    <input type="hidden" name="appointment_date" id="selectedDateInput" required>
+                                </div>
+
+                                <div class="time-slots-widget">
+                                    <div class="time-widget-header">
+                                        <h3>Available Time Slots</h3>
+                                        <span class="selected-date-display" id="selectedDateDisplay">Select a date first</span>
+                                    </div>
+
+                                    <div class="slots-legend">
+                                        <span class="legend-item"><span class="legend-dot available"></span> Available</span>
+                                        <span class="legend-item"><span class="legend-dot selected"></span> Selected</span>
+                                        <span class="legend-item"><span class="legend-dot unavailable"></span> Booked</span>
+                                    </div>
+
+                                    <div class="time-grid" id="timeSlotsGrid">
+                                        <label class="time-slot-btn">
+                                            <input type="radio" name="appointment_time" value="09:00 AM" class="sr-only" required>
+                                            <span>09:00 AM</span>
+                                        </label>
+                                        <label class="time-slot-btn">
+                                            <input type="radio" name="appointment_time" value="09:30 AM" class="sr-only">
+                                            <span>09:30 AM</span>
+                                        </label>
+                                        <label class="time-slot-btn">
+                                            <input type="radio" name="appointment_time" value="10:00 AM" class="sr-only">
+                                            <span>10:00 AM</span>
+                                        </label>
+                                        <label class="time-slot-btn">
+                                            <input type="radio" name="appointment_time" value="10:30 AM" class="sr-only">
+                                            <span>10:30 AM</span>
+                                        </label>
+                                        <label class="time-slot-btn disabled">
+                                            <input type="radio" name="appointment_time" value="11:00 AM" class="sr-only" disabled>
+                                            <span>11:00 AM</span>
+                                        </label>
+                                        <label class="time-slot-btn">
+                                            <input type="radio" name="appointment_time" value="11:30 AM" class="sr-only">
+                                            <span>11:30 AM</span>
+                                        </label>
+                                        <label class="time-slot-btn">
+                                            <input type="radio" name="appointment_time" value="02:00 PM" class="sr-only">
+                                            <span>02:00 PM</span>
+                                        </label>
+                                        <label class="time-slot-btn">
+                                            <input type="radio" name="appointment_time" value="02:30 PM" class="sr-only">
+                                            <span>02:30 PM</span>
+                                        </label>
+                                        <label class="time-slot-btn">
+                                            <input type="radio" name="appointment_time" value="03:00 PM" class="sr-only">
+                                            <span>03:00 PM</span>
+                                        </label>
+                                        <label class="time-slot-btn">
+                                            <input type="radio" name="appointment_time" value="03:30 PM" class="sr-only">
+                                            <span>03:30 PM</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-validation-msg" id="step3Error">Please select both a valid date and time slot.</div>
+
+                            <div class="step-actions split">
+                                <button type="button" class="btn btn-outline btn-prev" data-prev="2">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                    <span>Back</span>
+                                </button>
+                                <button type="button" class="btn btn-gold btn-next" data-next="4">
+                                    <span>Continue to Personal Details</span>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="step-panel" id="stepPanel4" data-panel="4">
+                            <div class="step-title-block">
+                                <h2>Patient Details & Review</h2>
+                                <p>Provide accurate patient information to confirm your private consultation.</p>
+                            </div>
+
+                            <div class="details-layout-grid">
+                                <div class="form-fields-column">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="firstName">First Name <span class="required">*</span></label>
+                                            <input type="text" id="firstName" name="first_name" class="form-control" placeholder="e.g., Jane" required>
+                                            <span class="field-error">First name is required.</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="lastName">Last Name <span class="required">*</span></label>
+                                            <input type="text" id="lastName" name="last_name" class="form-control" placeholder="e.g., Doe" required>
+                                            <span class="field-error">Last name is required.</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="patientEmail">Email Address <span class="required">*</span></label>
+                                            <input type="email" id="patientEmail" name="email" class="form-control" placeholder="jane.doe@example.com" required>
+                                            <span class="field-error">Please enter a valid email address.</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="patientPhone">Phone Number <span class="required">*</span></label>
+                                            <input type="tel" id="patientPhone" name="phone" class="form-control" placeholder="+234 800 000 0000" required>
+                                            <span class="field-error">Please enter a valid telephone number.</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="dob">Date of Birth <span class="required">*</span></label>
+                                            <input type="date" id="dob" name="dob" class="form-control" required>
+                                            <span class="field-error">Date of birth is required.</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="gender">Gender <span class="required">*</span></label>
+                                            <select id="gender" name="gender" class="form-control" required>
+                                                <option value="" disabled selected>Select gender</option>
+                                                <option value="Female">Female</option>
+                                                <option value="Male">Male</option>
+                                                <option value="Prefer not to say">Prefer not to say</option>
+                                            </select>
+                                            <span class="field-error">Please select a gender option.</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="patientAddress">Home Address (Lagos Area)</label>
+                                        <input type="text" id="patientAddress" name="address" class="form-control" placeholder="Street address, city/area in Lagos">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="visitReason">Reason for Medical Consultation</label>
+                                        <textarea id="visitReason" name="reason" class="form-control" rows="3" placeholder="Briefly describe symptoms or primary purpose for visiting..."></textarea>
+                                    </div>
+
+                                    <div class="form-group checkbox-group">
+                                        <label class="custom-checkbox">
+                                            <input type="checkbox" id="termsCheck" name="terms" required>
+                                            <span class="checkmark"></span>
+                                            <span class="checkbox-text">I confirm that the personal details provided above are accurate and consent to confidential clinical record processing.</span>
+                                        </label>
+                                        <span class="field-error" id="termsError">You must confirm accuracy to submit.</span>
+                                    </div>
+                                </div>
+
+                                <div class="summary-card-column">
+                                    <div class="summary-card">
+                                        <div class="summary-card-header">
+                                            <h3>Appointment Summary</h3>
+                                            <span class="type-pill">In-Person Consultation</span>
+                                        </div>
+                                        
+                                        <div class="summary-body">
+                                            <div class="summary-item">
+                                                <span class="summary-label">Department</span>
+                                                <strong class="summary-value" id="sumDepartment">—</strong>
+                                            </div>
+                                            <div class="summary-item">
+                                                <span class="summary-label">Consultant Doctor</span>
+                                                <strong class="summary-value" id="sumDoctor">—</strong>
+                                            </div>
+                                            <div class="summary-item">
+                                                <span class="summary-label">Date & Time</span>
+                                                <strong class="summary-value highlight" id="sumDateTime">—</strong>
+                                            </div>
+                                            <div class="summary-item">
+                                                <span class="summary-label">Facility Location</span>
+                                                <strong class="summary-value">Mother Teresa Medical Centre, Idimu</strong>
+                                            </div>
+                                        </div>
+
+                                        <div class="summary-footer">
+                                            <button type="button" class="edit-selection-btn" id="editSelectionsBtn">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                                <span>Edit Selections</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="privacy-micro-badge">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9A45C" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                        <span>Encrypted & Confidential Patient Records</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-actions split margin-top-lg">
+                                <button type="button" class="btn btn-outline btn-prev" data-prev="3">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                    <span>Back</span>
+                                </button>
+                                <button type="submit" class="btn btn-gold btn-submit" id="submitAppointmentBtn">
+                                    <span>Confirm & Book Appointment</span>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <div class="confirmation-panel" id="confirmationPanel" hidden>
+                        <div class="confirmation-content">
+                            <div class="success-icon-badge">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C9A45C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            </div>
+                            
+                            <h2>Appointment Request Received</h2>
+                            <p class="confirmation-lead">Thank you for choosing Mother Teresa Medical Centre. Your consultation request has been successfully registered.</p>
+
+                            <div class="confirmation-card">
+                                <div class="ref-number-block">
+                                    <span class="ref-label">Reference ID</span>
+                                    <strong class="ref-code" id="confirmRefCode">MTMC-000000</strong>
+                                </div>
+                                <hr class="card-divider">
+                                <div class="confirm-details-grid">
+                                    <div>
+                                        <span class="c-label">Patient Name</span>
+                                        <span class="c-val" id="confirmPatientName">—</span>
+                                    </div>
+                                    <div>
+                                        <span class="c-label">Department</span>
+                                        <span class="c-val" id="confirmDept">—</span>
+                                    </div>
+                                    <div>
+                                        <span class="c-label">Consultant Doctor</span>
+                                        <span class="c-val" id="confirmDoctor">—</span>
+                                    </div>
+                                    <div>
+                                        <span class="c-label">Date & Time</span>
+                                        <span class="c-val" id="confirmDateTime">—</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="confirmation-instructions">
+                                A confirmation notice has been dispatched to your email address. Our patient administration team will reach out via phone if pre-appointment preparations are required.
+                            </p>
+
+                            <div class="confirmation-actions">
+                                <button type="button" class="btn btn-outline" id="addToCalendarBtn">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                    <span>Add to Calendar</span>
+                                </button>
+                                <button type="button" class="btn btn-outline" onclick="window.print();">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                                    <span>Print Confirmation</span>
+                                </button>
+                                <a href="index.html" class="btn btn-gold">
+                                    <span>Return to Home</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="emergency-banner-section">
+            <div class="container">
+                <div class="emergency-card">
+                    <div class="emergency-icon-box">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C9A45C" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    <div class="emergency-text">
+                        <h3>Requiring Emergency Medical Care?</h3>
+                        <p>For urgent or life-threatening clinical situations, please proceed directly to our Emergency Bay or call our immediate emergency desk.</p>
+                    </div>
+                    <div class="emergency-cta">
+                        <a href="tel:+2349162874012" class="btn btn-emergency">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <span>Emergency: +234 916 287 4012</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="why-book-section">
+            <div class="container">
+                <div class="section-header center">
+                    <span class="eyebrow"><span class="gold-dot"></span> PATIENT ADVANTAGE <span class="gold-dot"></span></span>
+                    <h2 class="section-title">The Mother Teresa <span class="serif-gold">Standard</span></h2>
+                    <p class="section-subtitle">Why discerning patients rely on our medical centre for world-class private care.</p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C9A45C" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <h3>Experienced Consultants</h3>
+                        <p>Access internationally trained medical consultants and dedicated multidisciplinary care teams.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C9A45C" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        </div>
+                        <h3>Modern Technology</h3>
+                        <p>State-of-the-art diagnostic machinery and sterile, ultra-modern clinical operating theatres.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C9A45C" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        </div>
+                        <h3>Patient-Centred Care</h3>
+                        <p>Faith-driven compassion combined with VIP hospitality and tailored recovery suites.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C9A45C" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        </div>
+                        <h3>Seamless Scheduling</h3>
+                        <p>Minimized wait times, transparent scheduling, and dedicated concierge consultation desk.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="trust-privacy-section">
+            <div class="container">
+                <div class="trust-banner-wrapper">
+                    <div class="trust-column">
+                        <div class="trust-item">
+                            <div class="trust-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C9A45C" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                            <div>
+                                <h4>Strict Confidentiality</h4>
+                                <p>Medical records and personal consultation data are held under clinical privacy protocols.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="trust-column">
+                        <div class="trust-item">
+                            <div class="trust-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C9A45C" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                            <div>
+                                <h4>Protected Communications</h4>
+                                <p>All digital bookings and personal patient submissions are handled securely.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="trust-column">
+                        <div class="trust-item">
+                            <div class="trust-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C9A45C" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                            <div>
+                                <h4>Punctual Service</h4>
+                                <p>We respect your time and maintain organized consultation schedules.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="assistance-section">
+            <div class="container">
+                <div class="assistance-card-wrapper">
+                    <div class="assistance-text">
+                        <h2>Need Assistance Booking?</h2>
+                        <p>Our patient concierge desk is available to assist you with specialty selection or telephone appointments.</p>
+                    </div>
+                    <div class="assistance-info-grid">
+                        <div class="info-block">
+                            <span class="info-label">Direct Desk</span>
+                            <a href="tel:+2349162874012" class="info-val">+234 916 287 4012</a>
+                        </div>
+                        <div class="info-block">
+                            <span class="info-label">Email Inquiries</span>
+                            <a href="mailto:info@motherteresamedical.com" class="info-val">info@motherteresamedical.com</a>
+                        </div>
+                        <div class="info-block">
+                            <span class="info-label">Location</span>
+                            <span class="info-val">St. Francis Catholic Church, Idimu, Lagos</span>
+                        </div>
+                        <div class="info-block">
+                            <span class="info-label">Operating Hours</span>
+                            <span class="info-val">Mon - Sun: 08:00 AM - 08:00 PM</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-container">
+            <div class="footer-top-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="brand-logo footer-logo">
+                        <div class="logo-emblem">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M2 12h20M12 6a6 6 0 0 0-6 6c0 3.3 2.7 6 6 6s6-2.7 6-6a6 6 0 0 0-6-6z"/></svg>
+                        </div>
+                        <div class="logo-text">
+                            <span class="brand-name">MOTHER TERESA</span>
+                            <span class="brand-sub">MEDICAL CENTRE, IDIMU</span>
+                        </div>
+                    </a>
+                    <p class="footer-desc">
+                        Providing elite healthcare rooted in faith, cutting-edge diagnostic technology, and uncompromising luxury. Located at St. Francis Catholic Church, Idimu, Lagos.
+                    </p>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#about">About Our Facility</a></li>
+                        <li><a href="index.html#services">Medical Services</a></li>
+                        <li><a href="index.html#specialists">Consultants</a></li>
+                        <li><a href="appointments.html">Schedule Appointment</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4>Clinical Units</h4>
+                    <ul>
+                        <li><a href="index.html#departments">General Medicine</a></li>
+                        <li><a href="index.html#departments">Cardiology</a></li>
+                        <li><a href="index.html#departments">Pediatrics</a></li>
+                        <li><a href="index.html#departments">Obstetrics & Gynecology</a></li>
+                        <li><a href="index.html#departments">Radiology & Imaging</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4>Hospital Contact</h4>
+                    <p class="footer-contact-line">St. Francis Catholic Church, Idimu, Lagos, Nigeria.</p>
+                    <p class="footer-contact-line"><a href="tel:+2349162874012">+234 916 287 4012</a></p>
+                    <p class="footer-contact-line"><a href="mailto:info@motherteresamedical.com">info@motherteresamedical.com</a></p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Mother Teresa Medical Centre, Idimu. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <span>Privacy Policy</span>
+                    <span class="divider">•</span>
+                    <span>Patient Rights</span>
+                    <span class="divider">•</span>
+                    <span>Terms of Service</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
