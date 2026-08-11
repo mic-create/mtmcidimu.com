@@ -1,0 +1,147 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum Role {
+  PATIENT
+  DOCTOR
+  STAFF
+  ADMIN
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum ContactMessageStatus {
+  UNREAD
+  READ
+  RESOLVED
+  ARCHIVED
+}
+
+// ==========================================
+// MODELS
+// ==========================================
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(PATIENT)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relationships
+  doctorProfile Doctor?
+  patientProfile Patient?
+
+  @@map("users")
+}
+
+model Patient {
+  id        Int       @id @default(autoincrement())
+  userId    Int?      @unique
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+  dob       DateTime?
+  gender    String?
+  address   String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Relationships
+  user         User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  appointments Appointment[]
+
+  @@index([email])
+  @@map("patients")
+}
+
+model Department {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  // Relationships
+  doctors      Doctor[]
+  appointments Appointment[]
+
+  @@map("departments")
+}
+
+model Doctor {
+  id             Int      @id @default(autoincrement())
+  userId         Int?     @unique
+  departmentId   Int
+  name           String
+  specialty      String
+  biography      String?
+  experience     String?
+  qualifications String?
+  profileImage   String?
+  availability   String?  @default("Mon-Fri: 9am-4pm")
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+
+  // Relationships
+  user         User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  department   Department   @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  appointments Appointment[]
+
+  @@map("doctors")
+}
+
+model Appointment {
+  id              Int               @id @default(autoincrement())
+  patientId       Int
+  doctorId        Int
+  departmentId    Int
+  appointmentDate DateTime          @db.Date
+  appointmentTime String
+  reason          String?
+  appointmentType String?           @default("General Checkup")
+  status          AppointmentStatus @default(PENDING)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  // Relationships
+  patient    Patient    @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctor     Doctor     @relation(fields: [doctorId], references: [id], onDelete: Restrict)
+  department Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+
+  @@index([patientId])
+  @@index([doctorId])
+  @@index([departmentId])
+  @@index([appointmentDate])
+  @@map("appointments")
+}
+
+model ContactMessage {
+  id        Int                  @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  status    ContactMessageStatus @default(UNREAD)
+  createdAt DateTime             @default(now())
+
+  @@map("contact_messages")
+}
