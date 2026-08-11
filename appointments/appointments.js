@@ -1,505 +1,275 @@
-/**
- * Mother Teresa Medical Centre (MTMC) - Appointment System Controller
- * Handles multi-step form navigation, validation, doctor/department fetching,
- * and API booking submission to the Node.js / Express backend.
- */
-
-// ============================================================================
-// CONFIGURATION & STATE MANAGEMENT
-// ============================================================================
-
-// Replace this placeholder with your live Render backend URL in production
-const API_BASE_URL = 'https://mtmc-backend.onrender.com';
-
-const appointmentState = {
-  currentStep: 1,
-  departments: [],
-  doctors: [],
-  selectedDepartment: null,
-  selectedDoctor: null,
-  selectedDate: null,
-  selectedTime: null,
-  patientDetails: {
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    dob: '',
-    gender: '',
-    address: '',
-    reason: ''
-  },
-  isSubmitting: false
-};
-
-// ============================================================================
-// INITIALIZATION
-// ============================================================================
-
 document.addEventListener('DOMContentLoaded', () => {
-  initAppointmentWizard();
-  fetchDepartments();
-});
+  const API_BASE_URL = 'https://mtmc-backend.onrender.com';
 
-function initAppointmentWizard() {
-  setupNavigationButtons();
-  setupFormListeners();
-  setupDateAndTimePickers();
-  renderStep(appointmentState.currentStep);
-}
+  // State Management
+  let currentStep = 1;
+  const appointmentState = {
+    departmentId: '',
+    departmentName: '',
+    doctorId: '',
+    doctorName: '',
+    appointmentDate: '',
+    appointmentTime: '',
+    patientName: '',
+    patientEmail: '',
+    patientPhone: '',
+    reason: ''
+  };
 
-// ============================================================================
-// API INTEGRATION - DEPARTMENTS & DOCTORS
-// ============================================================================
-
-/**
- * Fetches active departments from the backend API.
- */
-async function fetchDepartments() {
-  const deptSelect = document.getElementById('department-select');
-  if (!deptSelect) return;
-
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/departments`);
-    if (!response.ok) throw new Error('Failed to load departments');
-    
-    const result = await response.json();
-    if (result.success && Array.isArray(result.data)) {
-      appointmentState.departments = result.data;
-      populateDepartmentDropdown(result.data);
-    }
-  } catch (error) {
-    console.error('Error fetching departments:', error);
-    showErrorMessage('Unable to load departments. Please refresh the page or try again later.');
-  }
-}
-
-/**
- * Fetches active doctors belonging to a specific department.
- */
-async function fetchDoctorsByDepartment(departmentId) {
-  const doctorSelect = document.getElementById('doctor-select');
-  if (!doctorSelect) return;
-
-  doctorSelect.disabled = true;
-  doctorSelect.innerHTML = '<option value="">Loading doctors...</option>';
-
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/departments/${departmentId}/doctors`);
-    if (!response.ok) {
-      if (response.status === 404) {
-        doctorSelect.innerHTML = '<option value="">No doctors available for this department</option>';
-        return;
-      }
-      throw new Error('Failed to load doctors');
-    }
-
-    const result = await response.json();
-    if (result.success && Array.isArray(result.data)) {
-      appointmentState.doctors = result.data;
-      populateDoctorDropdown(result.data);
-    } else {
-      doctorSelect.innerHTML = '<option value="">No doctors available</option>';
-    }
-  } catch (error) {
-    console.error('Error fetching doctors:', error);
-    doctorSelect.innerHTML = '<option value="">Error loading doctors</option>';
-    showErrorMessage('Unable to load doctors for the selected department.');
-  } finally {
-    doctorSelect.disabled = false;
-  }
-}
-
-// ============================================================================
-// UI DROPDOWN HELPERS
-// ============================================================================
-
-function populateDepartmentDropdown(departments) {
-  const deptSelect = document.getElementById('department-select');
-  if (!deptSelect) return;
-
-  deptSelect.innerHTML = '<option value="">Select a Department</option>';
-  departments.forEach((dept) => {
-    const option = document.createElement('option');
-    option.value = dept.id;
-    option.textContent = dept.name;
-    deptSelect.appendChild(option);
-  });
-}
-
-function populateDoctorDropdown(doctors) {
-  const doctorSelect = document.getElementById('doctor-select');
-  if (!doctorSelect) return;
-
-  if (doctors.length === 0) {
-    doctorSelect.innerHTML = '<option value="">No doctors available in this department</option>';
-    return;
-  }
-
-  doctorSelect.innerHTML = '<option value="">Select a Doctor</option>';
-  doctors.forEach((doc) => {
-    const option = document.createElement('option');
-    option.value = doc.id;
-    option.textContent = `${doc.name} (${doc.specialty})`;
-    doctorSelect.appendChild(option);
-  });
-}
-
-// ============================================================================
-// EVENT LISTENERS & FORM BINDING
-// ============================================================================
-
-function setupFormListeners() {
-  const deptSelect = document.getElementById('department-select');
+  // DOM Elements - Selects
+  const departmentSelect = document.getElementById('department-select');
   const doctorSelect = document.getElementById('doctor-select');
 
-  if (deptSelect) {
-    deptSelect.addEventListener('change', (e) => {
-      const deptId = parseInt(e.target.value, 10);
-      appointmentState.selectedDepartment = deptId || null;
-      appointmentState.selectedDoctor = null;
-      appointmentState.doctors = [];
-
-      if (deptId) {
-        fetchDoctorsByDepartment(deptId);
-      } else if (doctorSelect) {
-        doctorSelect.innerHTML = '<option value="">Select a Department First</option>';
-        doctorSelect.disabled = true;
-      }
-    });
-  }
-
-  if (doctorSelect) {
-    doctorSelect.addEventListener('change', (e) => {
-      const docId = parseInt(e.target.value, 10);
-      appointmentState.selectedDoctor = docId || null;
-    });
-  }
-
-  const appointmentForm = document.getElementById('appointment-form');
-  if (appointmentForm) {
-    appointmentForm.addEventListener('submit', handleFormSubmit);
-  }
-}
-
-function setupDateAndTimePickers() {
+  // DOM Elements - Inputs
   const dateInput = document.getElementById('appointment-date');
-  const timeInput = document.getElementById('appointment-time');
+  const timeSelect = document.getElementById('appointment-time');
+  const nameInput = document.getElementById('patient-name');
+  const emailInput = document.getElementById('patient-email');
+  const phoneInput = document.getElementById('patient-phone');
+  const reasonInput = document.getElementById('appointment-reason');
 
+  // Navigation Buttons
+  const btnStep1Next = document.getElementById('btn-step-1-next');
+  const btnStep2Prev = document.getElementById('btn-step-2-prev');
+  const btnStep2Next = document.getElementById('btn-step-2-next');
+  const btnStep3Prev = document.getElementById('btn-step-3-prev');
+  const appointmentForm = document.getElementById('appointment-form');
+
+  // Set min date to today
   if (dateInput) {
-    // Restrict date picker to today or future dates
-    const todayStr = new Date().toISOString().split('T')[0];
-    dateInput.setAttribute('min', todayStr);
-
-    dateInput.addEventListener('change', (e) => {
-      // Preserve raw YYYY-MM-DD calendar string without Date object conversion
-      appointmentState.selectedDate = e.target.value;
-    });
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.setAttribute('min', today);
   }
 
-  if (timeInput) {
-    timeInput.addEventListener('change', (e) => {
-      appointmentState.selectedTime = e.target.value;
-    });
-  }
-}
+  // Helper: Helper for API responses safely unpacking `data`
+  const extractData = (res) => (res && res.data) ? res.data : res;
 
-function capturePatientInput() {
-  appointmentState.patientDetails = {
-    firstName: document.getElementById('patient-first-name')?.value.trim() || '',
-    lastName: document.getElementById('patient-last-name')?.value.trim() || '',
-    email: document.getElementById('patient-email')?.value.trim() || '',
-    phone: document.getElementById('patient-phone')?.value.trim() || '',
-    dob: document.getElementById('patient-dob')?.value || '',
-    gender: document.getElementById('patient-gender')?.value || '',
-    address: document.getElementById('patient-address')?.value.trim() || '',
-    reason: document.getElementById('appointment-reason')?.value.trim() || 'General Consultation'
-  };
-}
+  // 1. Fetch Departments from Express API
+  async function loadDepartments() {
+    try {
+      departmentSelect.innerHTML = '<option value="">-- Loading Departments... --</option>';
+      const response = await fetch(`${API_BASE_URL}/api/departments`);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      
+      const result = await response.json();
+      const departments = extractData(result);
 
-// ============================================================================
-// WIZARD NAVIGATION & VALIDATION
-// ============================================================================
-
-function setupNavigationButtons() {
-  const nextBtn = document.getElementById('btn-next');
-  const prevBtn = document.getElementById('btn-prev');
-
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      if (validateCurrentStep()) {
-        if (appointmentState.currentStep < 3) {
-          appointmentState.currentStep++;
-          renderStep(appointmentState.currentStep);
-        }
+      departmentSelect.innerHTML = '<option value="">-- Select Department --</option>';
+      if (Array.isArray(departments)) {
+        departments.forEach(dept => {
+          const opt = document.createElement('option');
+          opt.value = dept.id;
+          opt.textContent = dept.name;
+          departmentSelect.appendChild(opt);
+        });
       }
-    });
-  }
-
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      if (appointmentState.currentStep > 1) {
-        appointmentState.currentStep--;
-        renderStep(appointmentState.currentStep);
-      }
-    });
-  }
-}
-
-function validateCurrentStep() {
-  hideErrorMessage();
-
-  if (appointmentState.currentStep === 1) {
-    if (!appointmentState.selectedDepartment) {
-      showErrorMessage('Please select a medical department.');
-      return false;
-    }
-    if (!appointmentState.selectedDoctor) {
-      showErrorMessage('Please select a doctor.');
-      return false;
-    }
-    if (!appointmentState.selectedDate) {
-      showErrorMessage('Please select an appointment date.');
-      return false;
-    }
-    if (!appointmentState.selectedTime) {
-      showErrorMessage('Please select an appointment time slot.');
-      return false;
+    } catch (err) {
+      console.error('Error fetching departments:', err);
+      departmentSelect.innerHTML = '<option value="">Failed to load departments</option>';
     }
   }
 
-  if (appointmentState.currentStep === 2) {
-    capturePatientInput();
-    const p = appointmentState.patientDetails;
+  // 2. Fetch Doctors when Department is Selected
+  departmentSelect.addEventListener('change', async (e) => {
+    const deptId = e.target.value;
+    appointmentState.departmentId = deptId;
+    appointmentState.departmentName = deptId ? e.target.options[e.target.selectedIndex].text : '';
+    
+    // Reset doctor selection
+    doctorSelect.innerHTML = '<option value="">-- Loading Doctors... --</option>';
+    doctorSelect.disabled = true;
+    clearError('department-error', departmentSelect);
 
-    if (!p.firstName) {
-      showErrorMessage('Please enter the patient\'s first name.');
-      return false;
-    }
-    if (!p.lastName) {
-      showErrorMessage('Please enter the patient\'s last name.');
-      return false;
-    }
-    if (!p.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email)) {
-      showErrorMessage('Please enter a valid email address.');
-      return false;
-    }
-    if (!p.phone || p.phone.length < 7) {
-      showErrorMessage('Please enter a valid phone number.');
-      return false;
-    }
-  }
-
-  return true;
-}
-
-function renderStep(stepNumber) {
-  const step1El = document.getElementById('step-1');
-  const step2El = document.getElementById('step-2');
-  const step3El = document.getElementById('step-3');
-
-  const prevBtn = document.getElementById('btn-prev');
-  const nextBtn = document.getElementById('btn-next');
-  const submitBtn = document.getElementById('btn-submit');
-
-  if (step1El) step1El.style.display = stepNumber === 1 ? 'block' : 'none';
-  if (step2El) step2El.style.display = stepNumber === 2 ? 'block' : 'none';
-  if (step3El) step3El.style.display = stepNumber === 3 ? 'block' : 'none';
-
-  if (prevBtn) prevBtn.style.display = stepNumber > 1 ? 'inline-block' : 'none';
-  if (nextBtn) nextBtn.style.display = stepNumber < 3 ? 'inline-block' : 'none';
-  if (submitBtn) submitBtn.style.display = stepNumber === 3 ? 'inline-block' : 'none';
-
-  updateStepIndicators(stepNumber);
-
-  if (stepNumber === 3) {
-    renderSummaryReview();
-  }
-}
-
-function updateStepIndicators(stepNumber) {
-  const indicators = document.querySelectorAll('.wizard-step');
-  indicators.forEach((ind, idx) => {
-    if (idx + 1 === stepNumber) {
-      ind.classList.add('active');
-    } else if (idx + 1 < stepNumber) {
-      ind.classList.add('completed');
-      ind.classList.remove('active');
-    } else {
-      ind.classList.remove('active', 'completed');
-    }
-  });
-}
-
-function renderSummaryReview() {
-  capturePatientInput();
-
-  const selectedDeptObj = appointmentState.departments.find(
-    (d) => d.id === appointmentState.selectedDepartment
-  );
-  const selectedDocObj = appointmentState.doctors.find(
-    (d) => d.id === appointmentState.selectedDoctor
-  );
-
-  const reviewDept = document.getElementById('review-department');
-  const reviewDoc = document.getElementById('review-doctor');
-  const reviewDate = document.getElementById('review-date');
-  const reviewTime = document.getElementById('review-time');
-  const reviewName = document.getElementById('review-patient-name');
-  const reviewContact = document.getElementById('review-patient-contact');
-
-  if (reviewDept) reviewDept.textContent = selectedDeptObj ? selectedDeptObj.name : '-';
-  if (reviewDoc) reviewDoc.textContent = selectedDocObj ? selectedDocObj.name : '-';
-  if (reviewDate) reviewDate.textContent = appointmentState.selectedDate || '-';
-  if (reviewTime) reviewTime.textContent = appointmentState.selectedTime || '-';
-  if (reviewName) reviewName.textContent = `${appointmentState.patientDetails.firstName} ${appointmentState.patientDetails.lastName}`;
-  if (reviewContact) reviewContact.textContent = `${appointmentState.patientDetails.email} | ${appointmentState.patientDetails.phone}`;
-}
-
-// ============================================================================
-// API SUBMISSION & RESPONSE HANDLING
-// ============================================================================
-
-async function handleFormSubmit(e) {
-  e.preventDefault();
-
-  if (appointmentState.isSubmitting) return;
-
-  if (!validateCurrentStep()) return;
-
-  capturePatientInput();
-
-  // Construct payload adhering strictly to backend specification
-  const payload = {
-    department: appointmentState.selectedDepartment,
-    selected_doctor: appointmentState.selectedDoctor,
-    // Preserve strict calendar string (YYYY-MM-DD) without timezone shifts
-    appointment_date: appointmentState.selectedDate,
-    appointment_time: appointmentState.selectedTime,
-    patientDetails: {
-      firstName: appointmentState.patientDetails.firstName,
-      lastName: appointmentState.patientDetails.lastName,
-      email: appointmentState.patientDetails.email,
-      phone: appointmentState.patientDetails.phone,
-      dob: appointmentState.patientDetails.dob || null,
-      gender: appointmentState.patientDetails.gender || null,
-      address: appointmentState.patientDetails.address || null
-    },
-    reason: appointmentState.patientDetails.reason || 'General Consultation',
-    appointment_type: 'In-Person'
-  };
-
-  setSubmittingState(true);
-  hideErrorMessage();
-
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/appointments`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
-
-    let result = null;
-    const contentType = response.headers.get('content-type');
-
-    if (contentType && contentType.includes('application/json')) {
-      result = await response.json();
-    }
-
-    if (!response.ok) {
-      // Display specific backend API error message if available
-      if (result && result.message) {
-        showErrorMessage(result.message);
-      } else {
-        showErrorMessage(`Server returned error status ${response.status}. Please try again.`);
-      }
+    if (!deptId) {
+      doctorSelect.innerHTML = '<option value="">-- Select a Department First --</option>';
       return;
     }
 
-    // Successful booking response handling
-    if (result && result.success && result.appointment) {
-      showConfirmationScreen(result.appointment);
-    } else {
-      showErrorMessage('An unexpected response was received from the server. Please contact support.');
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/departments/${deptId}/doctors`);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const result = await response.json();
+      const doctors = extractData(result);
+
+      if (Array.isArray(doctors) && doctors.length > 0) {
+        doctorSelect.innerHTML = '<option value="">-- Select Doctor --</option>';
+        doctors.forEach(doc => {
+          const opt = document.createElement('option');
+          opt.value = doc.id;
+          opt.textContent = `Dr. ${doc.name} (${doc.specialty || 'General'})`;
+          doctorSelect.appendChild(opt);
+        });
+        doctorSelect.disabled = false;
+      } else {
+        doctorSelect.innerHTML = '<option value="">No doctors available in this department</option>';
+      }
+    } catch (err) {
+      console.error('Error fetching doctors:', err);
+      doctorSelect.innerHTML = '<option value="">Failed to load doctors</option>';
     }
-  } catch (error) {
-    console.error('Network or fetch execution error:', error);
-    // Separate network-level errors from application API errors
-    showErrorMessage('Unable to reach the server. Please check your internet connection and try again.');
-  } finally {
-    setSubmittingState(false);
+  });
+
+  doctorSelect.addEventListener('change', (e) => {
+    appointmentState.doctorId = e.target.value;
+    appointmentState.doctorName = e.target.value ? e.target.options[e.target.selectedIndex].text : '';
+    clearError('doctor-error', doctorSelect);
+  });
+
+  // Validation Helpers
+  function showError(errorId, element) {
+    const errorEl = document.getElementById(errorId);
+    if (errorEl) errorEl.style.display = 'block';
+    if (element && element.parentElement) element.parentElement.classList.add('has-error');
   }
-}
 
-// ============================================================================
-// CONFIRMATION SCREEN DISPLAY
-// ============================================================================
-
-function showConfirmationScreen(appointmentData) {
-  const wizardContainer = document.getElementById('wizard-container');
-  const confirmationContainer = document.getElementById('confirmation-container');
-
-  if (wizardContainer) wizardContainer.style.display = 'none';
-  if (confirmationContainer) confirmationContainer.style.display = 'block';
-
-  // Format reference ID as MTMC-00000X
-  const numericId = appointmentData.id;
-  const formattedRef = `MTMC-${String(numericId).padStart(6, '0')}`;
-
-  const confRef = document.getElementById('conf-reference');
-  const confName = document.getElementById('conf-patient-name');
-  const confDept = document.getElementById('conf-department');
-  const confDoc = document.getElementById('conf-doctor');
-  const confDate = document.getElementById('conf-date');
-  const confTime = document.getElementById('conf-time');
-
-  if (confRef) confRef.textContent = formattedRef;
-  if (confName) confName.textContent = `${appointmentState.patientDetails.firstName} ${appointmentState.patientDetails.lastName}`;
-  if (confDept) confDept.textContent = appointmentData.department_name || '-';
-  if (confDoc) confDoc.textContent = appointmentData.doctor_name || '-';
-  if (confDate) confDate.textContent = appointmentData.date || appointmentState.selectedDate;
-  if (confTime) confTime.textContent = appointmentData.time || appointmentState.selectedTime;
-
-  // Scroll smoothly to top of confirmation area
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// ============================================================================
-// STATE HELPERS & UI MESSAGING
-// ============================================================================
-
-function setSubmittingState(isSubmitting) {
-  appointmentState.isSubmitting = isSubmitting;
-  const submitBtn = document.getElementById('btn-submit');
-  const prevBtn = document.getElementById('btn-prev');
-
-  if (submitBtn) {
-    submitBtn.disabled = isSubmitting;
-    submitBtn.textContent = isSubmitting ? 'Booking Appointment...' : 'Confirm & Book Appointment';
+  function clearError(errorId, element) {
+    const errorEl = document.getElementById(errorId);
+    if (errorEl) errorEl.style.display = 'none';
+    if (element && element.parentElement) element.parentElement.classList.remove('has-error');
   }
-  if (prevBtn) {
-    prevBtn.disabled = isSubmitting;
-  }
-}
 
-function showErrorMessage(message) {
-  const errorBox = document.getElementById('error-message-box');
-  if (errorBox) {
-    errorBox.textContent = message;
-    errorBox.style.display = 'block';
-    errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  } else {
-    alert(message);
-  }
-}
+  // Wizard Step Switching Logic
+  function goToStep(stepNumber) {
+    document.querySelectorAll('.wizard-step').forEach(step => step.classList.remove('active'));
+    document.querySelectorAll('.wizard-progress .step').forEach(step => step.classList.remove('active'));
 
-function hideErrorMessage() {
-  const errorBox = document.getElementById('error-message-box');
-  if (errorBox) {
-    errorBox.style.display = 'none';
-    errorBox.textContent = '';
+    const activeStep = document.getElementById(`wizard-step-${stepNumber}`);
+    const activeIndicator = document.getElementById(`step-indicator-${stepNumber}`);
+
+    if (activeStep) activeStep.classList.add('active');
+    if (activeIndicator) activeIndicator.classList.add('active');
+
+    currentStep = stepNumber;
   }
-}
+
+  // Step 1 Validation & Next
+  btnStep1Next.addEventListener('click', () => {
+    let isValid = true;
+
+    if (!departmentSelect.value) {
+      showError('department-error', departmentSelect);
+      isValid = false;
+    } else {
+      clearError('department-error', departmentSelect);
+    }
+
+    if (!doctorSelect.value) {
+      showError('doctor-error', doctorSelect);
+      isValid = false;
+    } else {
+      clearError('doctor-error', doctorSelect);
+    }
+
+    if (isValid) {
+      goToStep(2);
+    }
+  });
+
+  // Step 2 Validation & Navigation
+  btnStep2Prev.addEventListener('click', () => goToStep(1));
+  
+  btnStep2Next.addEventListener('click', () => {
+    let isValid = true;
+
+    if (!dateInput.value) {
+      showError('date-error', dateInput);
+      isValid = false;
+    } else {
+      clearError('date-error', dateInput);
+    }
+
+    if (!timeSelect.value) {
+      showError('time-error', timeSelect);
+      isValid = false;
+    } else {
+      clearError('time-error', timeSelect);
+    }
+
+    if (isValid) {
+      appointmentState.appointmentDate = dateInput.value;
+      appointmentState.appointmentTime = timeSelect.value;
+      goToStep(3);
+    }
+  });
+
+  // Step 3 Navigation & Submission
+  btnStep3Prev.addEventListener('click', () => goToStep(2));
+
+  appointmentForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    let isValid = true;
+
+    if (!nameInput.value.trim()) {
+      showError('name-error', nameInput);
+      isValid = false;
+    } else {
+      clearError('name-error', nameInput);
+    }
+
+    if (!emailInput.value.trim() || !emailInput.value.includes('@')) {
+      showError('email-error', emailInput);
+      isValid = false;
+    } else {
+      clearError('email-error', emailInput);
+    }
+
+    if (!phoneInput.value.trim()) {
+      showError('phone-error', phoneInput);
+      isValid = false;
+    } else {
+      clearError('phone-error', phoneInput);
+    }
+
+    if (!isValid) return;
+
+    // Build Payload for Express / Prisma endpoint
+    const payload = {
+      departmentId: parseInt(appointmentState.departmentId, 10),
+      doctorId: parseInt(appointmentState.doctorId, 10),
+      appointmentDate: appointmentState.appointmentDate,
+      appointmentTime: appointmentState.appointmentTime,
+      patientName: nameInput.value.trim(),
+      patientEmail: emailInput.value.trim(),
+      patientPhone: phoneInput.value.trim(),
+      reason: reasonInput.value.trim() || undefined
+    };
+
+    const submitBtn = document.getElementById('btn-submit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/appointments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Failed to submit appointment');
+      }
+
+      const responseData = extractData(result);
+
+      // Populate Summary on Step 4
+      document.getElementById('summary-ref').textContent = responseData.referenceNumber || responseData.id || 'CONFIRMED';
+      document.getElementById('summary-dept').textContent = appointmentState.departmentName;
+      document.getElementById('summary-doctor').textContent = appointmentState.doctorName;
+      document.getElementById('summary-datetime').textContent = `${appointmentState.appointmentDate} at ${appointmentState.appointmentTime}`;
+
+      goToStep(4);
+    } catch (err) {
+      console.error('Submission error:', err);
+      alert(`Error submitting appointment: ${err.message}`);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Confirm Booking';
+    }
+  });
+
+  // Initial load execution
+  loadDepartments();
+});
