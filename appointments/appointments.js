@@ -9,7 +9,7 @@
 // ============================================================================
 
 // Replace this placeholder with your live Render backend URL in production
-const API_BASE_URL = 'https://[INSERT MY ACTUAL RENDER BACKEND URL HERE]';
+const API_BASE_URL = 'https://mtmc-backend.onrender.com';
 
 const appointmentState = {
   currentStep: 1,
