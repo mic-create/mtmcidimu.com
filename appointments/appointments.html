@@ -4,123 +4,221 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Book an Appointment | Mother Teresa Medical Centre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="appointments.css" />
 </head>
 <body>
-  <div class="appointment-container">
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+
+  <div class="appointment-card-wrapper">
     <header class="appointment-header">
-      <h1>Book an Appointment</h1>
-      <p>Select a department and doctor to schedule your consultation.</p>
+      <div class="brand-badge">
+        <span class="badge-dot"></span> MTMC LUXURY HEALTHCARE
+      </div>
+      <h1>Schedule Your Medical Consultation</h1>
+      <p>Experience world-class, personalized medical care with our top-tier specialists.</p>
     </header>
 
     <div class="wizard-progress">
-      <div class="step active" id="step-indicator-1"><span>1</span> Department & Doctor</div>
-      <div class="step" id="step-indicator-2"><span>2</span> Date & Time</div>
-      <div class="step" id="step-indicator-3"><span>3</span> Patient Details</div>
-      <div class="step" id="step-indicator-4"><span>4</span> Confirmation</div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-bar-fill"></div>
+      </div>
+      
+      <div class="step active" id="step-indicator-1">
+        <div class="step-icon">01</div>
+        <div class="step-text">
+          <span class="step-label">STEP 01</span>
+          <span class="step-title">Specialty & Doctor</span>
+        </div>
+      </div>
+
+      <div class="step" id="step-indicator-2">
+        <div class="step-icon">02</div>
+        <div class="step-text">
+          <span class="step-label">STEP 02</span>
+          <span class="step-title">Date & Schedule</span>
+        </div>
+      </div>
+
+      <div class="step" id="step-indicator-3">
+        <div class="step-icon">03</div>
+        <div class="step-text">
+          <span class="step-label">STEP 03</span>
+          <span class="step-title">Patient Info</span>
+        </div>
+      </div>
+
+      <div class="step" id="step-indicator-4">
+        <div class="step-icon">04</div>
+        <div class="step-text">
+          <span class="step-label">STEP 04</span>
+          <span class="step-title">Confirmation</span>
+        </div>
+      </div>
     </div>
 
     <form id="appointment-form" novalidate>
       <div class="wizard-step active" id="wizard-step-1">
-        <h2>1. Choose Department & Doctor</h2>
+        <div class="step-header">
+          <h2>Select Department & Specialist</h2>
+          <p>Choose the medical discipline and expert physician for your appointment.</p>
+        </div>
         
         <div class="form-group">
-          <label for="department-select">Department <span class="required">*</span></label>
-          <select id="department-select" name="departmentId" required>
-            <option value="">-- Loading Departments... --</option>
-          </select>
-          <span class="error-message" id="department-error">Please select a department.</span>
+          <label for="department-select">
+            Department / Specialty <span class="required">*</span>
+          </label>
+          <div class="input-glass-container">
+            <select id="department-select" name="departmentId" required>
+              <option value="">-- Connecting to Live Departments... --</option>
+            </select>
+            <div class="select-arrow"></div>
+          </div>
+          <span class="error-message" id="department-error">Please select a department to proceed.</span>
         </div>
 
         <div class="form-group">
-          <label for="doctor-select">Doctor <span class="required">*</span></label>
-          <select id="doctor-select" name="doctorId" disabled required>
-            <option value="">-- Select a Department First --</option>
-          </select>
-          <span class="error-message" id="doctor-error">Please select a doctor.</span>
+          <label for="doctor-select">
+            Assigned Specialist <span class="required">*</span>
+          </label>
+          <div class="input-glass-container">
+            <select id="doctor-select" name="doctorId" disabled required>
+              <option value="">-- Select a Department First --</option>
+            </select>
+            <div class="select-arrow"></div>
+          </div>
+          <span class="error-message" id="doctor-error">Please select a physician.</span>
         </div>
 
         <div class="wizard-actions">
-          <div></div> <button type="button" class="btn btn-primary" id="btn-step-1-next">Continue</button>
+          <div></div>
+          <button type="button" class="btn btn-primary" id="btn-step-1-next">
+            <span>Continue to Schedule</span>
+            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
       </div>
 
       <div class="wizard-step" id="wizard-step-2">
-        <h2>2. Choose Date & Time</h2>
-
-        <div class="form-group">
-          <label for="appointment-date">Appointment Date <span class="required">*</span></label>
-          <input type="date" id="appointment-date" name="appointmentDate" required />
-          <span class="error-message" id="date-error">Please select a valid date.</span>
+        <div class="step-header">
+          <h2>Select Date & Preferred Time</h2>
+          <p>Pick a convenient calendar date and time slot for your visit.</p>
         </div>
 
         <div class="form-group">
-          <label for="appointment-time">Time Slot <span class="required">*</span></label>
-          <select id="appointment-time" name="appointmentTime" required>
-            <option value="">-- Select a Time Slot --</option>
-            <option value="09:00">09:00 AM</option>
-            <option value="10:00">10:00 AM</option>
-            <option value="11:00">11:00 AM</option>
-            <option value="12:00">12:00 PM</option>
-            <option value="14:00">02:00 PM</option>
-            <option value="15:00">03:00 PM</option>
-            <option value="16:00">04:00 PM</option>
-          </select>
+          <label for="appointment-date">Consultation Date <span class="required">*</span></label>
+          <div class="input-glass-container">
+            <input type="date" id="appointment-date" name="appointmentDate" required />
+          </div>
+          <span class="error-message" id="date-error">Please choose a valid upcoming date.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="appointment-time">Preferred Time Slot <span class="required">*</span></label>
+          <div class="input-glass-container">
+            <select id="appointment-time" name="appointmentTime" required>
+              <option value="">-- Select an Available Time Slot --</option>
+              <option value="09:00">09:00 AM (Morning Session)</option>
+              <option value="10:00">10:00 AM (Morning Session)</option>
+              <option value="11:00">11:00 AM (Morning Session)</option>
+              <option value="12:00">12:00 PM (Midday Session)</option>
+              <option value="14:00">02:00 PM (Afternoon Session)</option>
+              <option value="15:00">03:00 PM (Afternoon Session)</option>
+              <option value="16:00">04:00 PM (Evening Session)</option>
+            </select>
+            <div class="select-arrow"></div>
+          </div>
           <span class="error-message" id="time-error">Please select a time slot.</span>
         </div>
 
         <div class="wizard-actions">
           <button type="button" class="btn btn-secondary" id="btn-step-2-prev">Back</button>
-          <button type="button" class="btn btn-primary" id="btn-step-2-next">Continue</button>
+          <button type="button" class="btn btn-primary" id="btn-step-2-next">
+            <span>Continue to Patient Details</span>
+            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
       </div>
 
       <div class="wizard-step" id="wizard-step-3">
-        <h2>3. Patient Information</h2>
+        <div class="step-header">
+          <h2>Patient Identification</h2>
+          <p>Please enter your contact information to finalize the reservation.</p>
+        </div>
 
         <div class="form-group">
           <label for="patient-name">Full Name <span class="required">*</span></label>
-          <input type="text" id="patient-name" name="patientName" placeholder="John Doe" required />
-          <span class="error-message" id="name-error">Please enter your full name.</span>
+          <div class="input-glass-container">
+            <input type="text" id="patient-name" name="patientName" placeholder="e.g. Michael Overah" required />
+          </div>
+          <span class="error-message" id="name-error">Please provide your full name.</span>
         </div>
 
         <div class="form-group">
           <label for="patient-email">Email Address <span class="required">*</span></label>
-          <input type="email" id="patient-email" name="patientEmail" placeholder="john@example.com" required />
-          <span class="error-message" id="email-error">Please enter a valid email address.</span>
+          <div class="input-glass-container">
+            <input type="email" id="patient-email" name="patientEmail" placeholder="e.g. overahmichael@gmail.com" required />
+          </div>
+          <span class="error-message" id="email-error">Please provide a valid email address.</span>
         </div>
 
         <div class="form-group">
           <label for="patient-phone">Phone Number <span class="required">*</span></label>
-          <input type="tel" id="patient-phone" name="patientPhone" placeholder="+234..." required />
-          <span class="error-message" id="phone-error">Please enter your phone number.</span>
+          <div class="input-glass-container">
+            <input type="tel" id="patient-phone" name="patientPhone" placeholder="+234..." required />
+          </div>
+          <span class="error-message" id="phone-error">Please provide a valid phone number.</span>
         </div>
 
         <div class="form-group">
-          <label for="appointment-reason">Reason for Visit (Optional)</label>
-          <textarea id="appointment-reason" name="reason" rows="3" placeholder="Describe your symptoms or reason for appointment..."></textarea>
+          <label for="appointment-reason">Reason for Visit / Symptoms (Optional)</label>
+          <div class="input-glass-container">
+            <textarea id="appointment-reason" name="reason" rows="3" placeholder="Brief details about your symptoms or medical concerns..."></textarea>
+          </div>
         </div>
 
         <div class="wizard-actions">
           <button type="button" class="btn btn-secondary" id="btn-step-3-prev">Back</button>
-          <button type="submit" class="btn btn-success" id="btn-submit">Confirm Booking</button>
+          <button type="submit" class="btn btn-success" id="btn-submit">
+            <span>Confirm & Complete Booking</span>
+            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
       </div>
 
       <div class="wizard-step" id="wizard-step-4">
         <div class="confirmation-card">
-          <div class="success-icon">✓</div>
-          <h2>Appointment Request Sent!</h2>
-          <p>Thank you. Your appointment has been successfully recorded.</p>
+          <div class="success-glow">
+            <div class="success-icon">✓</div>
+          </div>
+          <h2>Booking Confirmed!</h2>
+          <p>Your appointment has been successfully recorded in our central medical system.</p>
           
-          <div class="summary-details">
-            <p><strong>Reference Number:</strong> <span id="summary-ref">---</span></p>
-            <p><strong>Department:</strong> <span id="summary-dept">---</span></p>
-            <p><strong>Doctor:</strong> <span id="summary-doctor">---</span></p>
-            <p><strong>Date & Time:</strong> <span id="summary-datetime">---</span></p>
+          <div class="summary-card">
+            <div class="summary-item">
+              <span class="sum-label">Reference ID</span>
+              <span class="sum-val highlight" id="summary-ref">MTMC-0000</span>
+            </div>
+            <div class="summary-item">
+              <span class="sum-label">Department</span>
+              <span class="sum-val" id="summary-dept">---</span>
+            </div>
+            <div class="summary-item">
+              <span class="sum-label">Physician</span>
+              <span class="sum-val" id="summary-doctor">---</span>
+            </div>
+            <div class="summary-item">
+              <span class="sum-label">Scheduled Time</span>
+              <span class="sum-val" id="summary-datetime">---</span>
+            </div>
           </div>
 
-          <button type="button" class="btn btn-primary" onclick="window.location.reload();">Book Another Appointment</button>
+          <button type="button" class="btn btn-primary btn-block" onclick="window.location.reload();">
+            Book Another Consultation
+          </button>
         </div>
       </div>
     </form>
