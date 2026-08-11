@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Configured to point directly to your live Node.js / Express backend
+  // Live Backend URL
   const API_BASE_URL = 'https://mtmc-backend.onrender.com';
 
   // Wizard Step Tracker
@@ -31,12 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
-   * Safe Data Extractor for API Responses
-   * Unpacks result.data when nested by global response wrappers
+   * Helper to unpack API responses safely
    */
   const extractData = (res) => (res && res.data) ? res.data : res;
 
-  // 1. Load Departments from Express Backend
+  // 1. Fetch Departments from Express Backend
   async function loadDepartments() {
     try {
       departmentSelect.innerHTML = '<option value="">-- Loading Departments... --</option>';
@@ -50,7 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (Array.isArray(departments)) {
         departments.forEach(dept => {
           const opt = document.createElement('option');
-          opt.value = dept.id;
+          // Store ID or Name as department identifier
+          opt.value = dept.id || dept.name;
           opt.textContent = dept.name;
           departmentSelect.appendChild(opt);
         });
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         doctorSelect.innerHTML = '<option value="">-- Select Doctor --</option>';
         doctors.forEach(doc => {
           const opt = document.createElement('option');
-          opt.value = doc.id;
+          opt.value = doc.id || doc.name;
           opt.textContent = `Dr. ${doc.name} (${doc.specialty || 'General'})`;
           doctorSelect.appendChild(opt);
         });
@@ -223,17 +223,14 @@ document.addEventListener('DOMContentLoaded', () => {
       clearError('phone-error', phoneInput);
     }
 
-    // Direct DOM extraction and integer parsing
-    const departmentIdNum = parseInt(departmentSelect.value, 10);
-    const doctorIdNum = parseInt(doctorSelect.value, 10);
-
-    if (isNaN(departmentIdNum)) {
+    // Double check step 1 elements directly from DOM
+    if (!departmentSelect.value) {
       showError('department-error', departmentSelect);
       goToStep(1);
       return;
     }
 
-    if (isNaN(doctorIdNum)) {
+    if (!doctorSelect.value) {
       showError('doctor-error', doctorSelect);
       goToStep(1);
       return;
@@ -241,16 +238,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!isValid) return;
 
-    // Build Payload for Express / Prisma Endpoint
-    const payload = {
-      departmentId: departmentIdNum,
-      doctorId: doctorIdNum,
-      appointmentDate: dateInput.value,
-      appointmentTime: timeSelect.value,
-      patientName: nameInput.value.trim(),
-      patientEmail: emailInput.value.trim(),
-      patientPhone: phoneInput.value.trim(),
-      reason: reasonInput.value.trim() || undefined
+    // Construct Payload matching backend's required key names
+    const requestBody = {
+      department: departmentSelect.value,
+      selected_doctor: doctorSelect.value,
+      appointment_date: dateInput.value,
+      appointment_time: timeSelect.value,
+      patientDetails: {
+        fullName: nameInput.value.trim(),
+        email: emailInput.value.trim(),
+        phone: phoneInput.value.trim()
+      },
+      reason: reasonInput.value.trim() || "General Consultation",
+      appointment_type: "In-Person"
     };
 
     const submitBtn = document.getElementById('btn-submit');
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch(`${API_BASE_URL}/api/appointments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(requestBody)
       });
 
       const rawResult = await response.json();
@@ -273,10 +273,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const responseData = extractData(rawResult);
 
       // Populate Step 4 Confirmation Card
-      document.getElementById('summary-ref').textContent = responseData.referenceNumber || responseData.id || 'MTMC-CONFIRMED';
-      document.getElementById('summary-dept').textContent = departmentSelect.options[departmentSelect.selectedIndex].text;
-      document.getElementById('summary-doctor').textContent = doctorSelect.options[doctorSelect.selectedIndex].text;
-      document.getElementById('summary-datetime').textContent = `${dateInput.value} at ${timeSelect.value}`;
+      const summaryRef = document.getElementById('summary-ref');
+      const summaryDept = document.getElementById('summary-dept');
+      const summaryDoc = document.getElementById('summary-doctor');
+      const summaryDateTime = document.getElementById('summary-datetime');
+
+      if (summaryRef) summaryRef.textContent = responseData.referenceNumber || responseData.id || 'MTMC-CONFIRMED';
+      if (summaryDept) summaryDept.textContent = departmentSelect.options[departmentSelect.selectedIndex].text;
+      if (summaryDoc) summaryDoc.textContent = doctorSelect.options[doctorSelect.selectedIndex].text;
+      if (summaryDateTime) summaryDateTime.textContent = `${dateInput.value} at ${timeSelect.value}`;
 
       goToStep(4);
     } catch (err) {
@@ -284,8 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
       alert(`Error submitting appointment: ${err.message}`);
     } finally {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = `<span>Confirm & Complete Booking</span>
-        <svg class="btn-icon" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      submitBtn.innerHTML = `<span>Confirm & Complete Booking</span>`;
     }
   });
 
