@@ -3,15 +3,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentStep = 1;
 
-  // DOM Elements - Selects
+  // Native Select Elements
   const departmentSelect = document.getElementById('department-select');
   const doctorSelect = document.getElementById('doctor-select');
 
-  // DOM Containers for Luxury Cards
+  // Dynamic Card Containers
   const departmentGrid = document.getElementById('department-grid');
   const doctorDirectory = document.getElementById('doctor-directory');
 
-  // DOM Inputs
+  // Input Fields
   const dateInput = document.getElementById('appointment-date');
   const timeSelect = document.getElementById('appointment-time');
   const nameInput = document.getElementById('patient-name');
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const phoneInput = document.getElementById('patient-phone');
   const reasonInput = document.getElementById('appointment-reason');
 
-  // Buttons
+  // Actions
   const btnStep1Next = document.getElementById('btn-step-1-next');
   const btnStep2Prev = document.getElementById('btn-step-2-prev');
   const btnStep2Next = document.getElementById('btn-step-2-next');
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnStep4Prev = document.getElementById('btn-step-4-prev');
   const appointmentForm = document.getElementById('appointment-form');
 
-  // Restrict calendar input to present and future dates
+  // Restrict calendar input to current and future dates
   if (dateInput) {
     const today = new Date().toISOString().split('T')[0];
     dateInput.setAttribute('min', today);
@@ -36,10 +36,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const extractData = (res) => (res && res.data) ? res.data : res;
 
-  // 1. Load Departments and Render Cards
+  // Real-Time Sidebar Updates
+  function updateSidebar() {
+    const sDept = document.getElementById('side-dept');
+    const sDoc = document.getElementById('side-doc');
+    const sDate = document.getElementById('side-date');
+    const sTime = document.getElementById('side-time');
+
+    if (sDept) sDept.textContent = departmentSelect.value ? departmentSelect.options[departmentSelect.selectedIndex].text : 'Not selected';
+    if (sDoc) sDoc.textContent = doctorSelect.value ? doctorSelect.options[doctorSelect.selectedIndex].text : 'Not selected';
+    if (sDate) sDate.textContent = dateInput.value || 'Not selected';
+    if (sTime) sTime.textContent = timeSelect.value || 'Not selected';
+  }
+
+  // 1. Fetch Departments & Render Hospital Cards
   async function loadDepartments() {
     try {
-      departmentGrid.innerHTML = '<div class="loading-placeholder">Loading available specialties...</div>';
+      departmentGrid.innerHTML = '<div class="loading-state">Loading clinical departments...</div>';
       const response = await fetch(`${API_BASE_URL}/api/departments`);
       if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
 
@@ -53,19 +66,17 @@ document.addEventListener('DOMContentLoaded', () => {
         departments.forEach(dept => {
           const deptVal = dept.id || dept.name;
 
-          // Native Select Option
           const opt = document.createElement('option');
           opt.value = deptVal;
           opt.textContent = dept.name;
           departmentSelect.appendChild(opt);
 
-          // Luxury Card
           const card = document.createElement('div');
           card.className = 'dept-card';
           card.dataset.value = deptVal;
           card.innerHTML = `
             <div class="dept-card-title">${dept.name}</div>
-            <div class="dept-card-desc">${dept.description || 'Specialized clinical care & medical consultations.'}</div>
+            <div class="dept-card-desc">${dept.description || 'Primary clinical care & medical consultation.'}</div>
           `;
 
           card.addEventListener('click', () => {
@@ -73,30 +84,32 @@ document.addEventListener('DOMContentLoaded', () => {
             card.classList.add('selected');
             departmentSelect.value = deptVal;
             departmentSelect.dispatchEvent(new Event('change'));
+            updateSidebar();
           });
 
           departmentGrid.appendChild(card);
         });
       } else {
-        departmentGrid.innerHTML = '<div class="loading-placeholder">No departments currently available.</div>';
+        departmentGrid.innerHTML = '<div class="loading-state">No departments available.</div>';
       }
     } catch (err) {
       console.error('Failed to load departments:', err);
-      departmentGrid.innerHTML = '<div class="loading-placeholder">Unable to load departments. Please try again later.</div>';
+      departmentGrid.innerHTML = '<div class="loading-state">Unable to load clinical departments.</div>';
     }
   }
 
-  // 2. Load Doctors based on selected Department
+  // 2. Fetch Doctors based on selected Department
   departmentSelect.addEventListener('change', async (e) => {
     const deptId = e.target.value;
 
-    doctorDirectory.innerHTML = '<div class="loading-placeholder">Fetching available specialists...</div>';
+    doctorDirectory.innerHTML = '<div class="loading-state">Retrieving physician directory...</div>';
     doctorSelect.innerHTML = '<option value="">-- Select Doctor --</option>';
     doctorSelect.disabled = true;
     clearError('department-error', departmentSelect);
+    updateSidebar();
 
     if (!deptId) {
-      doctorDirectory.innerHTML = '<div class="loading-placeholder">Please select a department first.</div>';
+      doctorDirectory.innerHTML = '<div class="loading-state">Please select a department first.</div>';
       return;
     }
 
@@ -113,16 +126,13 @@ document.addEventListener('DOMContentLoaded', () => {
         doctors.forEach(doc => {
           const docVal = doc.id || doc.name;
 
-          // Native Select Option
           const opt = document.createElement('option');
           opt.value = docVal;
           opt.textContent = `Dr. ${doc.name}`;
           doctorSelect.appendChild(opt);
 
-          // Get Initials
           const initials = doc.name ? doc.name.split(' ').map(n => n[0]).join('').substring(0, 2) : 'MD';
 
-          // Luxury Specialist Card
           const card = document.createElement('div');
           card.className = 'doc-card';
           card.dataset.value = docVal;
@@ -130,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="doc-avatar">${initials}</div>
             <div class="doc-info">
               <h4>Dr. ${doc.name}</h4>
-              <p>${doc.specialty || 'Consultant Specialist'}</p>
+              <p>${doc.specialty || 'Consultant Physician'}</p>
             </div>
           `;
 
@@ -139,25 +149,30 @@ document.addEventListener('DOMContentLoaded', () => {
             card.classList.add('selected');
             doctorSelect.value = docVal;
             doctorSelect.dispatchEvent(new Event('change'));
+            updateSidebar();
           });
 
           doctorDirectory.appendChild(card);
         });
         doctorSelect.disabled = false;
       } else {
-        doctorDirectory.innerHTML = '<div class="loading-placeholder">No physicians assigned to this department.</div>';
+        doctorDirectory.innerHTML = '<div class="loading-state">No physicians found for this department.</div>';
       }
     } catch (err) {
       console.error('Failed to load doctors:', err);
-      doctorDirectory.innerHTML = '<div class="loading-placeholder">Error retrieving doctor directory.</div>';
+      doctorDirectory.innerHTML = '<div class="loading-state">Error retrieving physician directory.</div>';
     }
   });
 
   doctorSelect.addEventListener('change', () => {
     clearError('doctor-error', doctorSelect);
+    updateSidebar();
   });
 
-  // UI Error helpers
+  dateInput.addEventListener('change', updateSidebar);
+  timeSelect.addEventListener('change', updateSidebar);
+
+  // Error UI Handlers
   function showError(errorId, element) {
     const errorEl = document.getElementById(errorId);
     if (errorEl) errorEl.style.display = 'block';
@@ -174,23 +189,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Real-Time Preview Updates
-  function updateSummaryPreview() {
-    const pDept = document.getElementById('preview-dept');
-    const pDoc = document.getElementById('preview-doctor');
-    const pDate = document.getElementById('preview-date');
-    const pTime = document.getElementById('preview-time');
-
-    if (pDept) pDept.textContent = departmentSelect.value ? departmentSelect.options[departmentSelect.selectedIndex].text : '---';
-    if (pDoc) pDoc.textContent = doctorSelect.value ? doctorSelect.options[doctorSelect.selectedIndex].text : '---';
-    if (pDate) pDate.textContent = dateInput.value || '---';
-    if (pTime) pTime.textContent = timeSelect.value || '---';
-  }
-
   // Stepper Transition Engine
   function goToStep(stepNumber) {
     document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.wizard-stepper .step-node').forEach((node, idx) => {
+    document.querySelectorAll('.step-progress-bar .p-step').forEach((node, idx) => {
       node.classList.remove('active');
       if (idx + 1 < stepNumber) {
         node.classList.add('completed');
@@ -200,45 +202,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const activeStep = document.getElementById(`wizard-step-${stepNumber}`);
-    const activeNode = document.getElementById(`step-node-${stepNumber}`);
-    const progressLine = document.getElementById('stepper-progress-line');
+    const activeNode = document.getElementById(`p-step-${stepNumber}`);
 
     if (activeStep) activeStep.classList.add('active');
     if (activeNode) activeNode.classList.add('active');
-    if (progressLine) {
-      progressLine.style.width = `${((stepNumber - 1) / 3) * 100}%`;
-    }
-
-    if (stepNumber === 4) {
-      updateSummaryPreview();
-    }
 
     currentStep = stepNumber;
-    window.scrollTo({ top: 180, behavior: 'smooth' });
+    window.scrollTo({ top: 120, behavior: 'smooth' });
   }
 
-  // Step 1 Navigation
+  // Navigation Click Handlers
   btnStep1Next.addEventListener('click', () => {
-    if (!departmentSelect.value) {
-      showError('department-error', departmentSelect);
-      return;
-    }
+    if (!departmentSelect.value) { showError('department-error', departmentSelect); return; }
     clearError('department-error', departmentSelect);
     goToStep(2);
   });
 
-  // Step 2 Navigation
   btnStep2Prev.addEventListener('click', () => goToStep(1));
   btnStep2Next.addEventListener('click', () => {
-    if (!doctorSelect.value) {
-      showError('doctor-error', doctorSelect);
-      return;
-    }
+    if (!doctorSelect.value) { showError('doctor-error', doctorSelect); return; }
     clearError('doctor-error', doctorSelect);
     goToStep(3);
   });
 
-  // Step 3 Navigation
   btnStep3Prev.addEventListener('click', () => goToStep(2));
   btnStep3Next.addEventListener('click', () => {
     let isValid = true;
@@ -251,10 +237,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isValid) goToStep(4);
   });
 
-  // Step 4 Navigation
   btnStep4Prev.addEventListener('click', () => goToStep(3));
 
-  // Form Submission
+  // Form Submission Block
   appointmentForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     let isValid = true;
@@ -275,12 +260,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!isValid) return;
 
-    // Split Full Name safely
+    // Split Full Name safely for Prisma/Backend
     const nameParts = fullNameRaw.split(' ');
     const firstName = nameParts[0] || '';
     const lastName = nameParts.slice(1).join(' ') || nameParts[0];
 
-    // Payload mapped for all variants expected by Express / Prisma
     const requestBody = {
       department: departmentSelect.value,
       department_id: departmentSelect.value,
@@ -308,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const submitBtn = document.getElementById('btn-submit');
     submitBtn.disabled = true;
-    submitBtn.innerHTML = `<span>Processing Booking...</span>`;
+    submitBtn.innerHTML = `<span>Processing Appointment...</span>`;
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/appointments`, {
@@ -320,12 +304,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const rawResult = await response.json();
 
       if (!response.ok) {
-        throw new Error(rawResult.message || 'Failed to complete appointment registration');
+        throw new Error(rawResult.message || 'Failed to submit appointment request');
       }
 
       const responseData = extractData(rawResult);
 
-      // Populate Confirmation Screen
+      // Populate Official Hospital Receipt Screen
       document.getElementById('summary-ref').textContent = `REF: ${responseData.referenceNumber || responseData.reference_number || responseData.id || 'MTMC-CONFIRMED'}`;
       document.getElementById('summary-patient').textContent = fullNameRaw;
       document.getElementById('summary-dept').textContent = departmentSelect.options[departmentSelect.selectedIndex].text;
@@ -335,13 +319,12 @@ document.addEventListener('DOMContentLoaded', () => {
       goToStep(5);
     } catch (err) {
       console.error('Submission error:', err);
-      alert(`Error completing booking: ${err.message}`);
+      alert(`Appointment submission error: ${err.message}`);
     } finally {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = `<span>Confirm & Reserve Appointment</span>`;
+      submitBtn.innerHTML = `<span>Confirm Appointment</span>`;
     }
   });
 
-  // Initial Execution
   loadDepartments();
 });
