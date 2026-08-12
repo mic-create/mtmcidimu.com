@@ -111,42 +111,45 @@
   <script>
     const API_BASE = 'https://mtmc-backend.onrender.com/api';
 
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const errorDisplay = document.getElementById('errorDisplay');
-      const submitBtn = document.getElementById('submitBtn');
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const errorDisplay = document.getElementById('errorDisplay');
+  const submitBtn = document.getElementById('submitBtn');
 
-      errorDisplay.style.display = 'none';
-      submitBtn.innerText = 'Authenticating...';
-      submitBtn.disabled = true;
+  errorDisplay.style.display = 'none';
+  submitBtn.innerText = 'Authenticating...';
+  submitBtn.disabled = true;
 
-      try {
-        const response = await fetch(`${API_BASE}/auth/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.success && data.token) {
-          localStorage.setItem('mtmc_jwt_token', data.token);
-          localStorage.setItem('mtmc_user_info', JSON.stringify(data.user || { email }));
-          window.location.href = 'admin-dashboard.html';
-        } else {
-          errorDisplay.innerText = data.message || 'Authentication failed.';
-          errorDisplay.style.display = 'block';
-        }
-      } catch (err) {
-        errorDisplay.innerText = 'Network error connecting to live backend.';
-        errorDisplay.style.display = 'block';
-      } finally {
-        submitBtn.innerText = 'Authenticate';
-        submitBtn.disabled = false;
-      }
+  try {
+    const response = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json' 
+      },
+      body: JSON.stringify({ email, password })
     });
+
+    const data = await response.json();
+
+    if (response.ok && data.success && data.token) {
+      localStorage.setItem('mtmc_jwt_token', data.token);
+      localStorage.setItem('mtmc_user_info', JSON.stringify(data.user || { email }));
+      window.location.href = 'admin-dashboard.html';
+    } else {
+      errorDisplay.innerText = data.message || 'Authentication failed. Please check credentials.';
+      errorDisplay.style.display = 'block';
+    }
+  } catch (err) {
+    console.error('Login Fetch Error:', err);
+    errorDisplay.innerText = 'Network error connecting to live backend. Please check browser console or CORS settings.';
+    errorDisplay.style.display = 'block';
+  } finally {
+    submitBtn.innerText = 'Authenticate';
+    submitBtn.disabled = false;
+  }
+});
   </script>
 </body>
 </html>
