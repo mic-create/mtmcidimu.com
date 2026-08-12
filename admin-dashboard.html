@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Overview | Mother Teresa Medical Centre</title>
+  <link rel="stylesheet" href="admin-dashboard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout">
+    
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-mark">MTMC</div>
+        <div class="brand-details">
+          <h2>Mother Teresa</h2>
+          <span>Medical Centre</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="active"><a href="#dashboard"><span class="icon">📊</span> Overview</a></li>
+          <li><a href="#appointments"><span class="icon">📅</span> Appointments</a></li>
+          <li><a href="#patients"><span class="icon">👥</span> Patients</a></li>
+          <li><a href="#doctors"><span class="icon">🩺</span> Doctors</a></li>
+          <li><a href="#departments"><span class="icon">🏥</span> Departments</a></li>
+          <li><a href="#messages"><span class="icon">💬</span> Messages</a></li>
+          <li><a href="#settings"><span class="icon">⚙️</span> Settings</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="main-wrapper">
+      
+      <header class="top-header">
+        <div class="header-title">
+          <h1>Hospital Operations Centre</h1>
+          <p class="subtitle">Real-time Command & Operational Telemetry</p>
+        </div>
+
+        <div class="header-profile">
+          <div class="user-avatar" id="avatarBadge">A</div>
+          <div class="user-info">
+            <span class="user-email" id="adminEmailDisplay">Admin user</span>
+            <span class="user-role" id="adminRoleDisplay">Administrator</span>
+          </div>
+          <button class="btn-logout" id="logoutBtn">Logout</button>
+        </div>
+      </header>
+
+      <main class="content-area">
+        
+        <section class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-label">Total Appointments</span>
+            <h3 class="stat-value" id="statTotalAppointments">--</h3>
+          </div>
+          <div class="stat-card highlight-gold">
+            <span class="stat-label">Pending Review</span>
+            <h3 class="stat-value" id="statPendingAppointments">--</h3>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Today's Appointments</span>
+            <h3 class="stat-value" id="statTodayAppointments">--</h3>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Total Patients</span>
+            <h3 class="stat-value" id="statTotalPatients">--</h3>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Active Doctors</span>
+            <h3 class="stat-value" id="statTotalDoctors">--</h3>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Departments</span>
+            <h3 class="stat-value" id="statTotalDepartments">--</h3>
+          </div>
+        </section>
+
+        <div class="dashboard-columns">
+          
+          <section class="panel panel-main">
+            <div class="panel-header">
+              <h2>Recent Appointment Requests</h2>
+            </div>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Department</th>
+                    <th>Date & Time</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="recentAppointmentsBody">
+                  <tr>
+                    <td colspan="6" class="table-loader">Loading hospital operational records...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel panel-side">
+            <div class="panel-header">
+              <h2>Today's Schedule</h2>
+            </div>
+            <div class="schedule-list" id="todayScheduleContainer">
+              <p class="empty-state">No scheduled appointments for today yet.</p>
+            </div>
+          </section>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="admin-dashboard.js"></script>
+</body>
+</html>

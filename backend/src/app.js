@@ -6,6 +6,9 @@ import { notFoundHandler, globalErrorHandler } from './middleware/errorMiddlewar
 
 import departmentRoutes from './routes/departmentRoutes.js';
 import doctorRoutes from './routes/doctorRoutes.js';
+// 1. Import route handlers (include .js extensions!)
+import authRoutes from './routes/auth.js';   // Make sure this file exists in src/routes/
+import adminRoutes from './routes/admin.js'; // Make sure this file exists in src/routes/
 import appointmentRoutes from './routes/appointmentRoutes.js';
 
 const app = express();
@@ -29,6 +32,9 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization']
   })
 );
+
+app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => {
   return successResponse(res, 'Mother Teresa Medical Centre API is running.');

@@ -1,3 +1,4 @@
+// src/routes/admin.js
 import express from 'express';
 import { authenticateToken, requireRole } from '../middleware/auth.js';
 import { getDashboardStats, getAllAppointments } from '../controllers/adminController.js';
