@@ -2,24 +2,28 @@ import prisma from '../config/database.js';
 import { successResponse, errorResponse } from '../utils/response.js';
 
 /**
- * Get all doctors (optionally filtered by departmentId)
+ * Get all active doctors (optionally filtered by departmentId query param)
  * GET /api/doctors?departmentId=ID
  */
 export const getDoctors = async (req, res, next) => {
   try {
     const { departmentId } = req.query;
-    const whereClause = {};
+
+    const whereClause = {
+      isActive: true,
+    };
 
     if (departmentId) {
-      const parsedDeptId = parseInt(departmentId, 10);
-      if (!isNaN(parsedDeptId)) {
-        whereClause.departmentId = parsedDeptId;
-      }
+      // departmentId is a String in your Prisma schema
+      whereClause.departmentId = String(departmentId);
     }
 
-    // Basic findMany without restrictive includes
     const doctors = await prisma.doctor.findMany({
-      where: whereClause
+      where: whereClause,
+      include: {
+        department: true
+      },
+      orderBy: { name: 'asc' }
     });
 
     return successResponse(res, 'Doctors retrieved successfully.', doctors);
@@ -34,19 +38,25 @@ export const getDoctors = async (req, res, next) => {
 };
 
 /**
- * Get a single doctor by ID
+ * Get a single active doctor by ID
  * GET /api/doctors/:id
  */
 export const getDoctorById = async (req, res, next) => {
   try {
-    const doctorId = parseInt(req.params.id, 10);
+    const doctorId = req.params.id;
 
-    if (isNaN(doctorId)) {
-      return errorResponse(res, 'Invalid doctor ID format.', 400);
+    if (!doctorId) {
+      return errorResponse(res, 'Doctor ID is required.', 400);
     }
 
-    const doctor = await prisma.doctor.findUnique({
-      where: { id: doctorId }
+    const doctor = await prisma.doctor.findFirst({
+      where: {
+        id: doctorId,
+        isActive: true
+      },
+      include: {
+        department: true
+      }
     });
 
     if (!doctor) {
