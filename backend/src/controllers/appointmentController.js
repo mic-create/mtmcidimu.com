@@ -1,44 +1,75 @@
-import {
-  createAppointmentService,
-  getAppointmentByIdService,
-  getAppointmentsService
-} from '../services/appointmentService.js';
+import { PrismaClient } from '@prisma/client';
+import { successResponse, errorResponse } from '../utils/response.js';
 
-/**
- * Get all appointments (or default base list)
- * GET /api/appointments
- */
+const prisma = new PrismaClient();
+
+// Allowed Prisma AppointmentStatus Enum values
+const VALID_STATUSES = ['PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED'];
+
 export const getAppointments = async (req, res, next) => {
   try {
-    const result = await getAppointmentsService();
-    return res.status(result.status).json(result.data);
+    const appointments = await prisma.appointment.findMany({
+      include: {
+        patient: true,
+        doctor: true,
+        department: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: appointments,
+    });
   } catch (error) {
+    console.error('Error fetching appointments:', error);
     next(error);
   }
 };
 
-/**
- * Create a new appointment
- * POST /api/appointments
- */
-export const createAppointment = async (req, res, next) => {
+export const updateAppointmentStatus = async (req, res, next) => {
   try {
-    const result = await createAppointmentService(req.body);
-    return res.status(result.status).json(result.data);
-  } catch (error) {
-    next(error);
-  }
-};
+    const { id } = req.params;
+    const { status } = req.body;
 
-/**
- * Get appointment details by ID
- * GET /api/appointments/:id
- */
-export const getAppointmentById = async (req, res, next) => {
-  try {
-    const result = await getAppointmentByIdService(req.params.id);
-    return res.status(result.status).json(result.data);
+    if (!status) {
+      return errorResponse(res, 'Status field is required.', 400);
+    }
+
+    const normalizedStatus = status.toUpperCase();
+
+    if (!VALID_STATUSES.includes(normalizedStatus)) {
+      return errorResponse(
+        res,
+        `Invalid status. Allowed values: ${VALID_STATUSES.join(', ')}`,
+        400
+      );
+    }
+
+    const appointmentId = isNaN(id) ? id : parseInt(id, 10);
+
+    const existingAppointment = await prisma.appointment.findUnique({
+      where: { id: appointmentId },
+    });
+
+    if (!existingAppointment) {
+      return errorResponse(res, 'Appointment record not found.', 404);
+    }
+
+    const updatedAppointment = await prisma.appointment.update({
+      where: { id: appointmentId },
+      data: { status: normalizedStatus },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: `Appointment status successfully updated to ${normalizedStatus}`,
+      appointment: updatedAppointment,
+    });
   } catch (error) {
+    console.error('Error updating appointment status:', error);
     next(error);
   }
 };

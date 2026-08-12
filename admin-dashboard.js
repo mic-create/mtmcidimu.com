@@ -4,13 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('mtmc_jwt_token');
   const user = JSON.parse(localStorage.getItem('mtmc_user_info') || '{}');
 
-  // 1. Guard check
   if (!token) {
     window.location.href = 'admin-login.html';
     return;
   }
 
-  // 2. Setup user header
   if (user.email) {
     const emailDisplay = document.getElementById('adminEmailDisplay');
     const avatarBadge = document.getElementById('avatarBadge');
@@ -18,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (avatarBadge) avatarBadge.innerText = user.email.charAt(0).toUpperCase();
   }
 
-  // 3. Event listeners
   const logoutBtn = document.getElementById('logoutBtn');
   if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
 
@@ -28,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
   }
 
-  // 4. Initial telemetry load
   fetchDashboardMetrics();
   fetchRecentAppointments();
 });
@@ -61,7 +57,6 @@ async function fetchWithAuth(endpoint, options = {}) {
   return response;
 }
 
-// Fetch dashboard telemetry metrics
 async function fetchDashboardMetrics() {
   try {
     const res = await fetchWithAuth('/admin/stats');
@@ -82,7 +77,6 @@ async function fetchDashboardMetrics() {
   }
 }
 
-// Fetch and render appointments
 async function fetchRecentAppointments() {
   const tbody = document.getElementById('recentAppointmentsBody');
   const todayContainer = document.getElementById('todayScheduleContainer');
@@ -107,14 +101,11 @@ async function fetchRecentAppointments() {
     let hasTodaySchedule = false;
 
     appointments.forEach((apt) => {
-      // 1. Resolve Patient Name
       const patientName = apt.patientName || apt.patient_name || (apt.patient ? (apt.patient.name || `${apt.patient.firstName || ''} ${apt.patient.lastName || ''}`.trim()) : null) || 'Anonymous Patient';
 
-      // 2. Resolve Doctor Name (Avoid "Dr. Dr." prefixing)
       let rawDoctor = apt.doctor ? (apt.doctor.name || apt.doctor.fullName || '') : (apt.doctorName || 'Unassigned');
       const doctorName = rawDoctor.startsWith('Dr.') ? rawDoctor : `Dr. ${rawDoctor}`;
 
-      // 3. Resolve Department
       const deptName = apt.department ? apt.department.name : (apt.departmentName || 'General Practice');
       
       const rawDate = apt.date || apt.appointmentDate || '';
@@ -122,7 +113,6 @@ async function fetchRecentAppointments() {
       const timeSlot = apt.time || apt.timeSlot || 'N/A';
       const status = (apt.status || 'PENDING').toUpperCase();
 
-      // Badge Style
       let badgeClass = 'badge-pending';
       if (status === 'CONFIRMED') badgeClass = 'badge-confirmed';
       if (status === 'COMPLETED') badgeClass = 'badge-completed';
@@ -133,7 +123,6 @@ async function fetchRecentAppointments() {
       const safePatient = escapeHtml(patientName);
       const safeDoctor = escapeHtml(doctorName);
 
-      // Render Table Row
       const row = document.createElement('tr');
       row.innerHTML = `
         <td><strong>${safePatient}</strong></td>
@@ -152,7 +141,6 @@ async function fetchRecentAppointments() {
       `;
       tbody.appendChild(row);
 
-      // Render Today's Schedule Panel
       if (todayContainer && rawDate.startsWith(todayStr)) {
         hasTodaySchedule = true;
         const item = document.createElement('div');
@@ -176,7 +164,6 @@ async function fetchRecentAppointments() {
   }
 }
 
-// Modal Handlers
 window.openManageModal = function(id, patient, doctor, status) {
   document.getElementById('modalAppointmentId').value = id;
   document.getElementById('modalPatientName').innerText = patient;
@@ -190,7 +177,6 @@ window.closeManageModal = function() {
   document.getElementById('manageModal').style.display = 'none';
 };
 
-// Submit Status Update via REST PATCH/PUT
 window.submitStatusUpdate = async function() {
   const id = document.getElementById('modalAppointmentId').value;
   const newStatus = document.getElementById('modalStatusSelect').value;
@@ -202,31 +188,25 @@ window.submitStatusUpdate = async function() {
   saveBtn.innerText = 'Updating Record...';
 
   try {
-    let res = await fetchWithAuth(`/appointments/${id}`, {
+    const res = await fetchWithAuth(`/appointments/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ status: newStatus })
     });
 
-    if (res.status === 404) {
-      res = await fetchWithAuth(`/appointments/${id}/status`, {
-        method: 'PUT',
-        body: JSON.stringify({ status: newStatus })
-      });
-    }
-
     const data = await res.json();
 
-    if (res.ok && (data.success || data.id)) {
+    if (res.ok && (data.success || data.appointment || data.id)) {
       closeManageModal();
       await fetchRecentAppointments();
       await fetchDashboardMetrics();
     } else {
-      errorEl.innerText = data.message || `Error (${res.status}): Unable to modify status.`;
+      const errorMessage = data.message || data.error || `Server error (${res.status})`;
+      errorEl.innerText = errorMessage;
       errorEl.style.display = 'block';
     }
   } catch (err) {
     console.error('Update Request Error:', err);
-    errorEl.innerText = 'Network error communicating with live backend.';
+    errorEl.innerText = err.message || 'Network error communicating with live backend.';
     errorEl.style.display = 'block';
   } finally {
     saveBtn.disabled = false;
