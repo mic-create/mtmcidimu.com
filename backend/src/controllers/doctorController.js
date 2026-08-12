@@ -2,13 +2,26 @@ import prisma from '../config/database.js';
 import { successResponse, errorResponse } from '../utils/response.js';
 
 /**
- * Get all active doctors
- * GET /api/doctors
+ * Get all active doctors (optionally filtered by departmentId query param)
+ * GET /api/doctors?departmentId=ID
  */
 export const getDoctors = async (req, res, next) => {
   try {
+    const { departmentId } = req.query;
+
+    const whereClause = {
+      isActive: true,
+    };
+
+    if (departmentId) {
+      const parsedDeptId = parseInt(departmentId, 10);
+      if (!isNaN(parsedDeptId)) {
+        whereClause.departmentId = parsedDeptId;
+      }
+    }
+
     const doctors = await prisma.doctor.findMany({
-      where: { isActive: true },
+      where: whereClause,
       select: {
         id: true,
         name: true,
@@ -19,6 +32,7 @@ export const getDoctors = async (req, res, next) => {
         profileImage: true,
         availability: true,
         isActive: true,
+        departmentId: true,
         department: {
           select: {
             id: true,
@@ -62,6 +76,7 @@ export const getDoctorById = async (req, res, next) => {
         profileImage: true,
         availability: true,
         isActive: true,
+        departmentId: true,
         department: {
           select: {
             id: true,

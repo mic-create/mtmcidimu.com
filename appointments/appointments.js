@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 2. Fetch Doctors based on selected Department
+  // 2. Fetch Doctors based on selected Department using query string: /api/doctors?departmentId=...
   departmentSelect.addEventListener('change', async (e) => {
     const deptId = e.target.value;
 
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/departments/${deptId}/doctors`);
+      const response = await fetch(`${API_BASE_URL}/api/doctors?departmentId=${encodeURIComponent(deptId)}`);
       if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
 
       const rawResult = await response.json();
