@@ -26,3 +26,9 @@ const gracefulShutdown = async (signal) => {
 
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+
+// server.js / app.js
+const adminRoutes = require('./routes/admin');
+
+// Mount Admin Protected API
+app.use('/api/admin', adminRoutes);
