@@ -1,148 +1,124 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
   provider = "prisma-client-js"
 }
 
-// ==========================================
-// ENUMS
-// ==========================================
-
+// 1. Role Enum (Preserving existing DOCTOR variant if it was used)
 enum Role {
   PATIENT
-  DOCTOR
   STAFF
+  DOCTOR
   ADMIN
 }
 
-enum AppointmentStatus {
-  PENDING
-  CONFIRMED
-  CANCELLED
-  COMPLETED
-}
-
-enum ContactMessageStatus {
-  UNREAD
-  READ
-  RESOLVED
-  ARCHIVED
-}
-
-// ==========================================
-// MODELS
-// ==========================================
-
+// 2. User Model
 model User {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique
-  passwordHash String
-  role         Role     @default(PATIENT)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
+  role      Role      @default(PATIENT)
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 
-  // Relationships
-  doctorProfile Doctor?
-  patientProfile Patient?
+  patient   Patient?
 
   @@map("users")
 }
 
+// 3. Patient Model
 model Patient {
-  id        Int       @id @default(autoincrement())
-  userId    Int?      @unique
-  firstName String
-  lastName  String
-  email     String
-  phone     String
-  dob       DateTime?
-  gender    String?
-  address   String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  // Relationships
-  user         User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  id           String        @id @default(uuid())
+  userId       String?       @unique
+  user         User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName    String?
+  lastName     String?
+  email        String        @unique
+  phone        String?
   appointments Appointment[]
+  createdAt    DateTime?     @default(now())
+  updatedAt    DateTime?     @updatedAt
 
-  @@index([email])
   @@map("patients")
 }
 
+// 4. Department Model
 model Department {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  description String?
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-
-  // Relationships
+  id           String        @id @default(uuid())
+  name         String        @unique
+  description  String?
+  isActive     Boolean?      @default(true)
   doctors      Doctor[]
   appointments Appointment[]
+  createdAt    DateTime?     @default(now())
 
   @@map("departments")
 }
 
+// 5. Doctor Model
 model Doctor {
-  id             Int      @id @default(autoincrement())
-  userId         Int?     @unique
-  departmentId   Int
+  id             String        @id @default(uuid())
   name           String
-  specialty      String
-  biography      String?
+  specialty      String?
+  email          String?       @unique
+  phone          String?
   experience     String?
   qualifications String?
-  profileImage   String?
-  availability   String?  @default("Mon-Fri: 9am-4pm")
-  isActive       Boolean  @default(true)
-  createdAt      DateTime @default(now())
-
-  // Relationships
-  user         User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
-  department   Department   @relation(fields: [departmentId], references: [id], onDelete: Restrict)
-  appointments Appointment[]
+  biography      String?
+  availability   String?
+  isActive       Boolean?      @default(true)
+  departmentId   String?
+  department     Department?   @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  appointments   Appointment[]
+  createdAt      DateTime?     @default(now())
 
   @@map("doctors")
 }
 
+// 6. Appointment Model
 model Appointment {
-  id              Int               @id @default(autoincrement())
-  patientId       Int
-  doctorId        Int
-  departmentId    Int
-  appointmentDate DateTime          @db.Date
-  appointmentTime String
+  id              String      @id @default(uuid())
+  referenceNumber String?     @unique
+  
+  patientId       String?
+  patient         Patient?    @relation(fields: [patientId], references: [id], onDelete: SetNull)
+
+  departmentId    String?
+  department      Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+
+  doctorId        String?
+  doctor          Doctor?     @relation(fields: [doctorId], references: [id], onDelete: SetNull)
+
+  // Direct Form Fields
+  firstName       String?
+  lastName        String?
+  patientEmail    String?
+  patientPhone    String?
+
+  appointmentDate String?
+  appointmentTime String?
+  appointmentType String?
   reason          String?
-  appointmentType String?           @default("General Checkup")
-  status          AppointmentStatus @default(PENDING)
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
+  status          String?     @default("PENDING")
+  
+  createdAt       DateTime?   @default(now())
+  updatedAt       DateTime?   @updatedAt
 
-  // Relationships
-  patient    Patient    @relation(fields: [patientId], references: [id], onDelete: Cascade)
-  doctor     Doctor     @relation(fields: [doctorId], references: [id], onDelete: Restrict)
-  department Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
-
-  @@index([patientId])
-  @@index([doctorId])
-  @@index([departmentId])
-  @@index([appointmentDate])
   @@map("appointments")
 }
 
+// 7. Contact Message Model
 model ContactMessage {
-  id        Int                  @id @default(autoincrement())
+  id        String    @id @default(uuid())
   name      String
   email     String
-  phone     String?
-  subject   String
+  subject   String?
   message   String
-  status    ContactMessageStatus @default(UNREAD)
-  createdAt DateTime             @default(now())
+  createdAt DateTime? @default(now())
 
   @@map("contact_messages")
 }
-
