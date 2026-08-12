@@ -64,21 +64,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const scrollY = window.scrollY;
         const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
 
-        if (docHeight > 0) {
+        if (docHeight > 0 && scrollProgress) {
             const progress = (scrollY / docHeight) * 100;
             scrollProgress.style.width = `${progress}%`;
         }
 
-        if (scrollY > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
+        if (header) {
+            if (scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
         }
 
-        if (scrollY > 400) {
-            backToTopBtn.classList.add('visible');
-        } else {
-            backToTopBtn.classList.remove('visible');
+        if (backToTopBtn) {
+            if (scrollY > 400) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
         }
 
         sections.forEach(section => {
@@ -107,7 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (targetElement) {
                 e.preventDefault();
-                if (navMenu.classList.contains('active')) {
+                const navMenu = document.getElementById('navMenu');
+                if (navMenu && navMenu.classList.contains('active')) {
                     toggleMobileMenu();
                 }
 
@@ -119,12 +124,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
+    if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
-    });
+    }
 
     /* ==========================================================================
        3. Mobile Navigation Toggle
@@ -133,18 +140,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const navMenu = document.getElementById('navMenu');
 
     function toggleMobileMenu() {
+        if (!navMenu || !mobileToggle) return;
         navMenu.classList.toggle('active');
         mobileToggle.classList.toggle('open');
 
         const bars = mobileToggle.querySelectorAll('.bar');
-        if (mobileToggle.classList.contains('open')) {
-            bars[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-            bars[1].style.opacity = '0';
-            bars[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-        } else {
-            bars[0].style.transform = 'none';
-            bars[1].style.opacity = '1';
-            bars[2].style.transform = 'none';
+        if (bars.length >= 3) {
+            if (mobileToggle.classList.contains('open')) {
+                bars[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                bars[1].style.opacity = '0';
+                bars[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+            } else {
+                bars[0].style.transform = 'none';
+                bars[1].style.opacity = '1';
+                bars[2].style.transform = 'none';
+            }
         }
     }
 
@@ -225,6 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let carouselInterval;
 
     function showSlide(index) {
+        if (slides.length === 0) return;
         slides.forEach(slide => slide.classList.remove('active'));
         
         if (index >= slides.length) {
@@ -273,6 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             
             const submitBtn = appointmentForm.querySelector('button[type="submit"]');
+            if (!submitBtn) return;
             const originalText = submitBtn.textContent;
 
             submitBtn.textContent = 'Processing Booking...';
@@ -302,7 +314,6 @@ document.addEventListener('DOMContentLoaded', () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('is-visible');
-                // Optional: Stop observing once revealed
                 observer.unobserve(entry.target);
             }
         });
