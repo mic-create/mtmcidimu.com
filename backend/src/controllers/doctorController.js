@@ -2,16 +2,13 @@ import prisma from '../config/database.js';
 import { successResponse, errorResponse } from '../utils/response.js';
 
 /**
- * Get all active doctors (optionally filtered by departmentId query param)
+ * Get all doctors (optionally filtered by departmentId)
  * GET /api/doctors?departmentId=ID
  */
 export const getDoctors = async (req, res, next) => {
   try {
     const { departmentId } = req.query;
-
-    const whereClause = {
-      isActive: true,
-    };
+    const whereClause = {};
 
     if (departmentId) {
       const parsedDeptId = parseInt(departmentId, 10);
@@ -20,13 +17,9 @@ export const getDoctors = async (req, res, next) => {
       }
     }
 
-    // Query doctors with department relation safely without assuming optional schema fields
+    // Basic findMany without restrictive includes
     const doctors = await prisma.doctor.findMany({
-      where: whereClause,
-      include: {
-        department: true
-      },
-      orderBy: { name: 'asc' }
+      where: whereClause
     });
 
     return successResponse(res, 'Doctors retrieved successfully.', doctors);
@@ -41,7 +34,7 @@ export const getDoctors = async (req, res, next) => {
 };
 
 /**
- * Get a single active doctor by ID
+ * Get a single doctor by ID
  * GET /api/doctors/:id
  */
 export const getDoctorById = async (req, res, next) => {
@@ -52,14 +45,8 @@ export const getDoctorById = async (req, res, next) => {
       return errorResponse(res, 'Invalid doctor ID format.', 400);
     }
 
-    const doctor = await prisma.doctor.findFirst({
-      where: {
-        id: doctorId,
-        isActive: true
-      },
-      include: {
-        department: true
-      }
+    const doctor = await prisma.doctor.findUnique({
+      where: { id: doctorId }
     });
 
     if (!doctor) {
