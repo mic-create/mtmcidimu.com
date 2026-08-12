@@ -3,29 +3,38 @@ import { successResponse, errorResponse } from '../utils/response.js';
 
 const prisma = new PrismaClient();
 
-// Allowed Prisma AppointmentStatus Enum values
 const VALID_STATUSES = ['PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED'];
 
 export const getAppointments = async (req, res, next) => {
   try {
-    const appointments = await prisma.appointment.findMany({
-      include: {
-        patient: true,
-        doctor: true,
-        department: true,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
+    let appointments;
+    
+    // Attempt query with relational inclusions first
+    try {
+      appointments = await prisma.appointment.findMany({
+        include: {
+          patient: true,
+          doctor: true,
+          department: true,
+        },
+        orderBy: { createdAt: 'desc' },
+      });
+    } catch (relationError) {
+      console.warn('Prisma relation include failed, falling back to basic query:', relationError.message);
+      // Safe fallback if relations are flat scalar fields
+      appointments = await prisma.appointment.findMany({
+        orderBy: { createdAt: 'desc' },
+      });
+    }
 
     return res.status(200).json({
       success: true,
       data: appointments,
+      appointments: appointments // Dual property support
     });
   } catch (error) {
-    console.error('Error fetching appointments:', error);
-    next(error);
+    console.error('Error in getAppointments controller:', error);
+    return errorResponse(res, `Database error: ${error.message}`, 500);
   }
 };
 
@@ -65,11 +74,11 @@ export const updateAppointmentStatus = async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
-      message: `Appointment status successfully updated to ${normalizedStatus}`,
+      message: `Appointment status updated to ${normalizedStatus}`,
       appointment: updatedAppointment,
     });
   } catch (error) {
     console.error('Error updating appointment status:', error);
-    next(error);
+    return errorResponse(res, `Failed to update status: ${error.message}`, 500);
   }
 };
