@@ -20,32 +20,23 @@ export const getDoctors = async (req, res, next) => {
       }
     }
 
+    // Query doctors with department relation safely without assuming optional schema fields
     const doctors = await prisma.doctor.findMany({
       where: whereClause,
-      select: {
-        id: true,
-        name: true,
-        specialty: true,
-        biography: true,
-        experience: true,
-        qualifications: true,
-        profileImage: true,
-        availability: true,
-        isActive: true,
-        departmentId: true,
-        department: {
-          select: {
-            id: true,
-            name: true
-          }
-        }
+      include: {
+        department: true
       },
       orderBy: { name: 'asc' }
     });
 
     return successResponse(res, 'Doctors retrieved successfully.', doctors);
   } catch (error) {
-    next(error);
+    console.error('CRITICAL: Error in getDoctors controller:', error);
+    return errorResponse(
+      res, 
+      `Database query error: ${error.message || 'Failed to fetch doctors'}`, 
+      500
+    );
   }
 };
 
@@ -66,23 +57,8 @@ export const getDoctorById = async (req, res, next) => {
         id: doctorId,
         isActive: true
       },
-      select: {
-        id: true,
-        name: true,
-        specialty: true,
-        biography: true,
-        experience: true,
-        qualifications: true,
-        profileImage: true,
-        availability: true,
-        isActive: true,
-        departmentId: true,
-        department: {
-          select: {
-            id: true,
-            name: true
-          }
-        }
+      include: {
+        department: true
       }
     });
 
@@ -92,6 +68,11 @@ export const getDoctorById = async (req, res, next) => {
 
     return successResponse(res, 'Doctor retrieved successfully.', doctor);
   } catch (error) {
-    next(error);
+    console.error('CRITICAL: Error in getDoctorById controller:', error);
+    return errorResponse(
+      res, 
+      `Database query error: ${error.message || 'Failed to fetch doctor'}`, 
+      500
+    );
   }
 };
