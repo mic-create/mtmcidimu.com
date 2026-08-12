@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login | Mother Teresa Medical Centre</title>
+  <link rel="stylesheet" href="admin-dashboard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-color: var(--navy-primary);
+    }
+    .login-card {
+      background: var(--surface-white);
+      padding: 40px;
+      border-radius: 4px;
+      width: 100%;
+      max-width: 400px;
+      border-top: 4px solid var(--champagne-gold);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+    .login-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .login-header h1 {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      color: var(--navy-primary);
+      margin-bottom: 6px;
+    }
+    .login-header p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .form-group input:focus {
+      border-color: var(--champagne-gold);
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--navy-primary);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-submit:hover {
+      background-color: var(--navy-light);
+    }
+    .error-msg {
+      color: #DC2626;
+      font-size: 0.8rem;
+      margin-top: 12px;
+      text-align: center;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Mother Teresa</h1>
+      <p>Hospital Administration Portal</p>
+    </div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Admin Email</label>
+        <input type="email" id="email" required placeholder="admin@mtmc.com" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required placeholder="••••••••" />
+      </div>
+
+      <button type="submit" class="btn-submit" id="submitBtn">Authenticate</button>
+      <div class="error-msg" id="errorDisplay"></div>
+    </form>
+  </div>
+
+  <script>
+    const API_BASE = 'https://mtmc-backend.onrender.com/api';
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const errorDisplay = document.getElementById('errorDisplay');
+      const submitBtn = document.getElementById('submitBtn');
+
+      errorDisplay.style.display = 'none';
+      submitBtn.innerText = 'Authenticating...';
+      submitBtn.disabled = true;
+
+      try {
+        const response = await fetch(`${API_BASE}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success && data.token) {
+          localStorage.setItem('mtmc_jwt_token', data.token);
+          localStorage.setItem('mtmc_user_info', JSON.stringify(data.user || { email }));
+          window.location.href = 'admin-dashboard.html';
+        } else {
+          errorDisplay.innerText = data.message || 'Authentication failed.';
+          errorDisplay.style.display = 'block';
+        }
+      } catch (err) {
+        errorDisplay.innerText = 'Network error connecting to live backend.';
+        errorDisplay.style.display = 'block';
+      } finally {
+        submitBtn.innerText = 'Authenticate';
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

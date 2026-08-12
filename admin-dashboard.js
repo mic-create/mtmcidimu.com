@@ -1,113 +1,94 @@
-// Dynamic API Base URL Configuration
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:5000/api'
-  : 'https://mtmc-backend.onrender.com/api';
-
-// Relative path to the admin login page
-const ADMIN_LOGIN_PATH = './login.html'; 
+// Production Render API Base URL
+const API_BASE = 'https://mtmc-backend.onrender.com/api';
 
 document.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('mtmc_jwt_token');
   const user = JSON.parse(localStorage.getItem('mtmc_user_info') || '{}');
 
-  // 1. Enforce Authentication & Redirect if missing
+  // 1. Enforce Authentication Guard (Redirect to root admin-login.html if missing)
   if (!token) {
-    redirectToLogin();
+    window.location.href = 'admin-login.html';
     return;
   }
 
-  // 2. Populate Header Information
+  // 2. Populate Header Details
   if (user.email) {
-    const emailElem = document.getElementById('adminEmailDisplay');
-    const avatarElem = document.getElementById('avatarBadge');
-    if (emailElem) emailElem.innerText = user.email;
-    if (avatarElem) avatarElem.innerText = user.email.charAt(0).toUpperCase();
+    const emailDisplay = document.getElementById('adminEmailDisplay');
+    const avatarBadge = document.getElementById('avatarBadge');
+    if (emailDisplay) emailDisplay.innerText = user.email;
+    if (avatarBadge) avatarBadge.innerText = user.email.charAt(0).toUpperCase();
   }
 
-  // 3. Attach Event Listeners
+  // 3. Attach Logout Event
   const logoutBtn = document.getElementById('logoutBtn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', handleLogout);
   }
 
-  // 4. Fetch Operational Telemetry Data
+  // 4. Fetch Live Data
   fetchDashboardMetrics(token);
   fetchRecentAppointments(token);
 });
-
-// Redirect Helper
-function redirectToLogin() {
-  window.location.href = ADMIN_LOGIN_PATH;
-}
 
 // Logout Handler
 function handleLogout() {
   localStorage.removeItem('mtmc_jwt_token');
   localStorage.removeItem('mtmc_user_info');
-  redirectToLogin();
+  window.location.href = 'admin-login.html';
 }
 
-// Authenticated Fetch Helper
+// Authenticated API Wrapper
 async function fetchWithAuth(endpoint, token) {
-  try {
-    const response = await fetch(`${API_BASE}${endpoint}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (response.status === 401 || response.status === 403) {
-      handleLogout();
-      throw new Error('Session expired or unauthorized.');
+  const response = await fetch(`${API_BASE}${endpoint}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     }
+  });
 
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error(`Fetch error for ${endpoint}:`, error);
-    throw error;
+  if (response.status === 401 || response.status === 403) {
+    handleLogout();
+    throw new Error('Unauthorized or expired session.');
   }
+
+  return response.json();
 }
 
-// Fetch Metrics for Cards
+// Fetch Metrics & Stats
 async function fetchDashboardMetrics(token) {
   try {
     const data = await fetchWithAuth('/admin/stats', token);
     
-    if (data.success && data.stats) {
-      const setVal = (id, val) => {
-        const el = document.getElementById(id);
-        if (el) el.innerText = val ?? 0;
-      };
+    // Safely extract stats regardless of object wrapping structure
+    const stats = data.stats || data.data || data;
 
-      setVal('statTotalAppointments', data.stats.totalAppointments);
-      setVal('statPendingAppointments', data.stats.pendingAppointments);
-      setVal('statTodayAppointments', data.stats.todayAppointments);
-      setVal('statTotalPatients', data.stats.totalPatients);
-      setVal('statTotalDoctors', data.stats.totalDoctors);
-      setVal('statTotalDepartments', data.stats.totalDepartments);
+    if (data.success !== false) {
+      setElementText('statTotalAppointments', stats.totalAppointments ?? stats.appointmentsCount ?? '--');
+      setElementText('statPendingAppointments', stats.pendingAppointments ?? stats.pendingCount ?? '--');
+      setElementText('statTodayAppointments', stats.todayAppointments ?? stats.todayCount ?? '--');
+      setElementText('statTotalPatients', stats.totalPatients ?? stats.patientsCount ?? '--');
+      setElementText('statTotalDoctors', stats.totalDoctors ?? stats.doctorsCount ?? '--');
+      setElementText('statTotalDepartments', stats.totalDepartments ?? stats.departmentsCount ?? '--');
     }
   } catch (error) {
-    console.error('Failed to load operational stats:', error);
+    console.error('Failed to load operational statistics:', error);
   }
 }
 
-// Fetch Recent Appointments Table & Today's Schedule
+// Fetch Recent Appointments
 async function fetchRecentAppointments(token) {
   try {
     const data = await fetchWithAuth('/appointments', token);
     const tbody = document.getElementById('recentAppointmentsBody');
     const todayContainer = document.getElementById('todayScheduleContainer');
 
+    const appointments = data.appointments || data.data || (Array.isArray(data) ? data : []);
+
     if (!tbody) return;
 
-    if (!data.success || !data.appointments || data.appointments.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" class="table-loader">No record found.</td></tr>';
+    if (!appointments || appointments.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="table-loader">No appointment records found in database.</td></tr>';
       return;
     }
 
@@ -117,44 +98,59 @@ async function fetchRecentAppointments(token) {
     const todayStr = new Date().toISOString().split('T')[0];
     let hasTodaySchedule = false;
 
-    data.appointments.forEach((apt) => {
-      // Format Date
-      const aptDate = apt.date ? new Date(apt.date).toLocaleDateString() : 'N/A';
-      const statusBadge = apt.status === 'CONFIRMED' 
+    appointments.forEach((apt) => {
+      // Safe property extraction matching Prisma Schema variations
+      const patientName = apt.patientName || apt.patient_name || (apt.patient ? apt.patient.name : 'N/A');
+      const doctorName = apt.doctor ? (apt.doctor.name || apt.doctor.fullName) : (apt.doctorName || 'Unassigned');
+      const deptName = apt.department ? apt.department.name : (apt.departmentName || 'General');
+      
+      const rawDate = apt.date || apt.appointmentDate || '';
+      const formattedDate = rawDate ? new Date(rawDate).toLocaleDateString() : 'N/A';
+      const timeSlot = apt.time || apt.timeSlot || 'N/A';
+      const status = (apt.status || 'PENDING').toUpperCase();
+
+      const statusBadge = status === 'CONFIRMED' 
         ? `<span class="badge badge-confirmed">Confirmed</span>`
-        : `<span class="badge badge-pending">Pending</span>`;
+        : `<span class="badge badge-pending">${status}</span>`;
 
       // Render Table Row
       const row = document.createElement('tr');
       row.innerHTML = `
-        <td><strong>${apt.patientName || 'N/A'}</strong></td>
-        <td>Dr. ${apt.doctor ? apt.doctor.name : 'Unassigned'}</td>
-        <td>${apt.department ? apt.department.name : 'General'}</td>
-        <td>${aptDate} ${apt.time ? 'at ' + apt.time : ''}</td>
+        <td><strong>${patientName}</strong></td>
+        <td>Dr. ${doctorName}</td>
+        <td>${deptName}</td>
+        <td>${formattedDate}</td>
+        <td>${timeSlot}</td>
         <td>${statusBadge}</td>
         <td><button style="border:none; background:none; cursor:pointer; font-weight:600; color:#0B192C;">Manage</button></td>
       `;
       tbody.appendChild(row);
 
-      // Populate Today's Schedule Panel
-      if (apt.date && apt.date.startsWith(todayStr) && todayContainer) {
+      // Render Today's Schedule Panel
+      if (todayContainer && rawDate.startsWith(todayStr)) {
         hasTodaySchedule = true;
         const item = document.createElement('div');
         item.className = 'schedule-item';
         item.innerHTML = `
-          <div class="schedule-time">${apt.time || 'Scheduled'}</div>
-          <div class="schedule-patient">${apt.patientName}</div>
-          <div class="schedule-doctor">Dr. ${apt.doctor ? apt.doctor.name : 'General'}</div>
+          <div class="schedule-time">${timeSlot}</div>
+          <div class="schedule-patient">${patientName}</div>
+          <div class="schedule-doctor">Dr. ${doctorName} (${deptName})</div>
         `;
         todayContainer.appendChild(item);
       }
     });
 
-    if (!hasTodaySchedule && todayContainer) {
-      todayContainer.innerHTML = '<p class="empty-state" style="font-size:0.8rem; color:#6B7280;">No appointments scheduled for today.</p>';
+    if (todayContainer && !hasTodaySchedule) {
+      todayContainer.innerHTML = '<p class="empty-state" style="font-size:0.8rem; color:#6B7280; padding:12px 0;">No appointments scheduled for today.</p>';
     }
 
   } catch (error) {
     console.error('Failed to load recent appointments:', error);
   }
+}
+
+// Helper safely updates text DOM nodes
+function setElementText(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.innerText = text;
 }
