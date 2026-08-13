@@ -56,7 +56,7 @@ async function fetchWithAuth(endpoint, options = {}) {
   if (response.status === 401 || response.status === 403) {
     console.error(`Authentication failed (${response.status}) for ${endpoint}`);
     handleLogout();
-    throw new Error(`Auth Error ${response.status}: Unauthorized access.`);
+    throw new Error(`Auth Error ${response.status}: Access unauthorized or token expired.`);
   }
 
   return response;
@@ -75,14 +75,13 @@ async function fetchDashboardMetrics() {
     const json = await res.json();
     console.log('[/admin/stats] Payload Received:', json);
 
-    // Flexible extraction across different wrapper formats
     const s = json.stats || json.data || json;
 
-    setElementText('statTotalAppointments', s.totalAppointments ?? s.appointmentsCount ?? s.total_appointments ?? 7);
-    setElementText('statPendingAppointments', s.pendingAppointments ?? s.pendingCount ?? s.pending_appointments ?? 7);
+    setElementText('statTotalAppointments', s.totalAppointments ?? s.appointmentsCount ?? s.total_appointments ?? 0);
+    setElementText('statPendingAppointments', s.pendingAppointments ?? s.pendingCount ?? s.pending_appointments ?? 0);
     setElementText('statTodayAppointments', s.todayAppointments ?? s.todayCount ?? s.today_appointments ?? 0);
-    setElementText('statTotalPatients', s.totalPatients ?? s.patientsCount ?? s.total_patients ?? 2);
-    setElementText('statTotalDoctors', s.totalDoctors ?? s.doctorsCount ?? s.total_doctors ?? 5);
+    setElementText('statTotalPatients', s.totalPatients ?? s.patientsCount ?? s.total_patients ?? 0);
+    setElementText('statTotalDoctors', s.totalDoctors ?? s.doctorsCount ?? s.total_doctors ?? 0);
     setElementText('statTotalDepartments', s.totalDepartments ?? s.departmentsCount ?? s.total_departments ?? 0);
 
   } catch (error) {
@@ -126,6 +125,7 @@ async function fetchRecentAppointments() {
     appointments.forEach((apt) => {
       // 1. Patient Name Extraction
       const patientName = apt.patientName || apt.patient_name || 
+        (apt.firstName ? `${apt.firstName} ${apt.lastName || ''}`.trim() : null) ||
         (apt.patient ? (apt.patient.name || `${apt.patient.firstName || ''} ${apt.patient.lastName || ''}`.trim()) : null) || 
         'Anonymous Patient';
 
@@ -136,9 +136,9 @@ async function fetchRecentAppointments() {
       // 3. Department Name Extraction
       const deptName = apt.department ? (apt.department.name || apt.department) : (apt.departmentName || 'General Practice');
       
-      const rawDate = apt.date || apt.appointmentDate || apt.createdAt || '';
+      const rawDate = apt.appointmentDate || apt.date || apt.createdAt || '';
       const formattedDate = rawDate ? new Date(rawDate).toLocaleDateString() : 'N/A';
-      const timeSlot = apt.time || apt.timeSlot || 'N/A';
+      const timeSlot = apt.appointmentTime || apt.time || apt.timeSlot || 'N/A';
       const status = (apt.status || 'PENDING').toUpperCase();
 
       // Status Badge Style
@@ -225,12 +225,21 @@ window.submitStatusUpdate = async function() {
 
     const data = await res.json();
 
-    if (res.ok && (data.success || data.appointment || data.id)) {
+    if (res.ok && (data.success || data.data || data.id)) {
       closeManageModal();
       await fetchRecentAppointments();
       await fetchDashboardMetrics();
     } else {
-      const errorMessage = data.message || data.error || `Server error (${res.status})`;
+      let errorMessage = data.message || data.error || `HTTP ${res.status} error occurred`;
+      
+      if (res.status === 400) {
+        errorMessage = `Validation Error (400): ${errorMessage}`;
+      } else if (res.status === 404) {
+        errorMessage = `Not Found (404): ${errorMessage}`;
+      } else if (res.status >= 500) {
+        errorMessage = `Server Error (${res.status}): ${errorMessage}`;
+      }
+
       errorEl.innerText = errorMessage;
       errorEl.style.display = 'block';
     }
