@@ -1,84 +1,69 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '../config/database.js';
 import { successResponse, errorResponse } from '../utils/response.js';
 
-const prisma = new PrismaClient();
-
-const VALID_STATUSES = ['PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED'];
-
-export const getAppointments = async (req, res, next) => {
+export const createAppointment = async (req, res, next) => {
   try {
-    let appointments;
-    
-    // Attempt query with relational inclusions first
-    try {
-      appointments = await prisma.appointment.findMany({
-        include: {
-          patient: true,
-          doctor: true,
-          department: true,
-        },
-        orderBy: { createdAt: 'desc' },
-      });
-    } catch (relationError) {
-      console.warn('Prisma relation include failed, falling back to basic query:', relationError.message);
-      // Safe fallback if relations are flat scalar fields
-      appointments = await prisma.appointment.findMany({
-        orderBy: { createdAt: 'desc' },
-      });
-    }
+    const {
+      department,
+      department_id,
+      selected_doctor,
+      doctor_id,
+      appointment_date,
+      appointment_time,
+      patientDetails,
+      patient_name,
+      patient_email,
+      patient_phone,
+      first_name,
+      last_name,
+      reason
+    } = req.body;
 
-    return res.status(200).json({
-      success: true,
-      data: appointments,
-      appointments: appointments // Dual property support
+    // Extract patient details safely
+    const fullName = patient_name || (patientDetails ? patientDetails.fullName : '') || `${first_name || ''} ${last_name || ''}`.trim();
+    const email = patient_email || (patientDetails ? patientDetails.email : '');
+    const phone = patient_phone || (patientDetails ? patientDetails.phone : '');
+
+    const docId = doctor_id || selected_doctor;
+    const deptId = department_id || department;
+
+    // Generate reference code
+    const referenceNumber = `MTMC-${Math.floor(100000 + Math.random() * 900000)}`;
+
+    const appointment = await prisma.appointment.create({
+      data: {
+        referenceNumber,
+        patientName: fullName,
+        patientEmail: email,
+        patientPhone: phone,
+        appointmentDate: new Date(appointment_date),
+        appointmentTime: appointment_time,
+        reason: reason || 'General Consultation',
+        status: 'PENDING',
+        ...(docId && { doctorId: String(docId) }),
+        ...(deptId && { departmentId: String(deptId) })
+      }
     });
+
+    return successResponse(res, 'Appointment created successfully.', appointment, 201);
   } catch (error) {
-    console.error('Error in getAppointments controller:', error);
-    return errorResponse(res, `Database error: ${error.message}`, 500);
+    console.error('Error creating appointment:', error);
+    return errorResponse(
+      res,
+      `Failed to create appointment: ${error.message}`,
+      500
+    );
   }
 };
 
-export const updateAppointmentStatus = async (req, res, next) => {
+export const getAppointments = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const { status } = req.body;
-
-    if (!status) {
-      return errorResponse(res, 'Status field is required.', 400);
-    }
-
-    const normalizedStatus = status.toUpperCase();
-
-    if (!VALID_STATUSES.includes(normalizedStatus)) {
-      return errorResponse(
-        res,
-        `Invalid status. Allowed values: ${VALID_STATUSES.join(', ')}`,
-        400
-      );
-    }
-
-    const appointmentId = isNaN(id) ? id : parseInt(id, 10);
-
-    const existingAppointment = await prisma.appointment.findUnique({
-      where: { id: appointmentId },
+    const appointments = await prisma.appointment.findMany({
+      orderBy: { createdAt: 'desc' }
     });
 
-    if (!existingAppointment) {
-      return errorResponse(res, 'Appointment record not found.', 404);
-    }
-
-    const updatedAppointment = await prisma.appointment.update({
-      where: { id: appointmentId },
-      data: { status: normalizedStatus },
-    });
-
-    return res.status(200).json({
-      success: true,
-      message: `Appointment status updated to ${normalizedStatus}`,
-      appointment: updatedAppointment,
-    });
+    return successResponse(res, 'Appointments retrieved successfully.', appointments);
   } catch (error) {
-    console.error('Error updating appointment status:', error);
-    return errorResponse(res, `Failed to update status: ${error.message}`, 500);
+    next(error);
   }
 };

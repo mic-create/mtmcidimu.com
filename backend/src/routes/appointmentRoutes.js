@@ -1,19 +1,12 @@
 import { Router } from 'express';
-import { 
-  getAppointments, 
-  updateAppointmentStatus 
-} from '../controllers/appointmentController.js';
-import { authenticateToken } from '../middleware/authMiddleware.js';
+import { createAppointment, getAppointments } from '../controllers/appointmentController.js';
 
 const router = Router();
 
-// Retrieve all appointments (Admin authenticated)
-router.get('/', authenticateToken, getAppointments);
+// Public endpoint for patient appointment creation
+router.post('/', createAppointment);
 
-// Update status routes - supporting standard REST endpoints
-router.patch('/:id', authenticateToken, updateAppointmentStatus);
-router.patch('/:id/status', authenticateToken, updateAppointmentStatus);
-router.put('/:id', authenticateToken, updateAppointmentStatus);
-router.put('/:id/status', authenticateToken, updateAppointmentStatus);
+// Admin dashboard endpoint
+router.get('/', getAppointments);
 
 export default router;
